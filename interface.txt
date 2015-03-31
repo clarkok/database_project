@@ -89,3 +89,25 @@ delete_card:
     code
   }
 
+new_book
+  [{...book}]
+  ->
+  {
+    code
+  }
+
+new_books
+  file
+  ->
+  {
+    code
+  }
+
+delete_books
+  [
+    bid
+  ]
+  ->
+  {
+    code
+  }
