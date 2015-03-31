@@ -6,6 +6,7 @@ year,
 author,
 price,
 total,
+cover,
 stock
 
 cid,
