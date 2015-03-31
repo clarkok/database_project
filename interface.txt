@@ -1,0 +1,90 @@
+bid,
+category,
+title,
+press,
+year,
+author,
+price,
+total,
+stock
+
+cid,
+name,
+unit,
+category,
+
+aid,
+salt,
+passwd,
+name,
+phone
+
+cid,
+bid,
+borrow_date,
+return_date,
+aid
+
+login: [POST]
+  aid, passwd
+  ->
+    {
+      code : 0 //success
+      session_id
+    }
+
+query:
+  {
+  [{column, operator, value}],
+  sort_by,
+  order,
+  page
+  }
+  ->
+    [
+    {...book}
+    ]
+
+borrow:
+  {
+    cid,
+    bid
+  }
+  ->
+    {
+      code, // 0 success 1 not enough stock -1 empty bid
+      date
+    }
+
+return:
+  {
+    cid,
+    bid
+  }
+
+books:
+  {
+    cid
+  }
+  ->
+    [{...book}]
+
+list_card:
+  {..., page}
+  -> [{...card}]
+
+new_card:
+  {}
+  ->
+  {
+    code
+    cid
+  }
+
+delete_card:
+  {cid}
+  ->
+  {
+    code
+  }
+
