@@ -1,0 +1,116 @@
+$aside_width = 200px
+$background = #eee
+$aside_background = #262626
+$aside_color = $background - #111
+
+html, body
+  margin 0
+  padding 0
+  background-color $background
+
+html
+  height 100%
+
+body
+  padding-left $aside_width
+  min-height 100%
+  font-family "Microsoft Yahei"
+
+aside
+  background-color $aside_background
+  box-sizing border-box
+  color $aside_color
+  height 100%
+  left 0
+  overflow-x hidden
+  overflow-y auto
+  position fixed
+  top 0
+  width $aside_width
+  h1
+    border-bottom 1px solid $aside_color
+    color $aside_color + #111
+    font-size 2em
+    font-weight 300
+    margin 0
+    padding .5em
+  section
+    margin-top 1em
+    .title
+      color $aside_color - #444
+      padding-left 1em
+    ul
+      background-color black
+      list-style none
+      margin 0
+      padding 0
+      li > a, li > a:visited
+        color $aside_color
+        display block
+        font-size .8em
+        height 2em
+        line-height 2em
+        overflow hidden
+        padding-left 2em
+        position relative
+        text-decoration none
+        transition all .3s
+        &:after
+          border-color transparent $background transparent transparent
+          border-style solid
+          border-width 1em
+          content " "
+          display block
+          height 0
+          position absolute
+          right -2em
+          top 0
+          transition all .3s
+          width 0
+        &:hover
+          background-color $aside_background + #333
+          color $aside_color + #111
+          cursor pointer
+        &.current
+          padding-left 3em
+          &:after
+            right 0
+
+body.unlogin
+  #login
+    display block
+  #admin
+    display none
+
+body.login
+  #login
+    display none
+  #admin
+    display block
+
+#wrapper
+  padding 1em
+
+  section
+    display none
+  &.start
+    #start-content
+      display block
+  &.query
+    #query-content
+      display block
+  &.login
+    #login-content
+      display block
+  &.borrow
+    #borrow-content
+      display block
+  &.return
+    #return-content
+      display block
+  &.cards
+    #cards-content
+      display block
+  &.books
+    #books-content
+      display block

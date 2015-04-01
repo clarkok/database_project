@@ -1,0 +1,53 @@
+doctype html
+html(lang="zh-CN")
+  head
+    meta(charset="utf-8")
+    title Library Manage System - Database Project
+    link(rel="stylesheet" href="css/style.css")
+  body.unlogin
+    aside
+      h1 Library
+      section#student
+        span.title Students
+        ul
+          li
+            a(href="#query") Query
+      section#login
+        span.title Login
+        ul
+          li
+            a(href="#login") Login
+          li
+            a(href="mailto:mail@clarkok.com") Contact
+      section#admin
+        span.title Admin
+        ul
+          li
+            a(href="#borrow") Borrow
+          li
+            a(href="#return") Return
+          li
+            a(href="#cards") Cards
+          li
+            a(href="#books") Books
+          li
+            a(href="#logout") Logout
+    #wrapper.start
+      section#start-content
+        h2 Welcome
+      section#query-content
+        h2 Query
+      section#login-content
+        h2 Login
+      section#borrow-content
+        h2 Borrow
+      section#return-content
+        h2 Return
+      section#cards-content
+        h2 Cards
+      section#books-content
+        h2 Books
+
+    script(src="js/jquery.js")
+    script(src="js/socket.io.js")
+    script(src="js/script.js")
