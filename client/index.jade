@@ -37,6 +37,28 @@ html(lang="zh-CN")
         h2 Welcome
       section#query-content
         h2 Query
+        .content
+          ul
+            li.title
+              .column.bid
+                span.title ID
+              .column.category
+                span.title Category
+              .column.title
+                span.title Title
+              .column.press
+                span.title Press
+              .column.year
+                span.title Year
+              .column.author
+                span.title Author
+              .column.price
+                span.title Price
+              .column.total
+                span.title Total
+              .column.stock
+                span.stock Stock
+          ul.page-number
       section#login-content
         h2 Login
         .content
@@ -47,6 +69,8 @@ html(lang="zh-CN")
             span.input-span
               input#passwd(type="password" name="password")
               label(for="passwd") Password
+            span.submit
+              button(type="submit") Submit
       section#borrow-content
         h2 Borrow
       section#return-content

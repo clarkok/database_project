@@ -6,6 +6,38 @@ var $wrapper = $('#wrapper');
 
 // query
 (function ($, w) {
+  var books = {};
+  var $list = $('#query-content ul');
+
+  var buildBook = function (book) {
+    return $('<li />').append(
+      $('<div />').addClass('column bid').text(book.bid),
+      $('<div />').addClass('column category').text(book.category),
+      $('<div />').addClass('column title').text(book.title),
+      $('<div />').addClass('column press').text(book.press),
+      $('<div />').addClass('column year').text(book.year),
+      $('<div />').addClass('column author').text(book.author),
+      $('<div />').addClass('column price').text(book.price),
+      $('<div />').addClass('column total').text(book.total),
+      $('<div />').addClass('column stock').text(book.stock)
+    );
+  };
+
+  var insertBook = function ($book) {
+    if ()
+  };
+
+  Object.observe(books, function (changes) {
+    changes.forEach(function (change) {
+      switch (change.type) {
+        case "add":
+        case "update":
+        case "delete":
+        default:
+      };
+    });
+  });
+
   route['query'] = {
     init : function () {
     },

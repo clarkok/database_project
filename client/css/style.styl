@@ -116,6 +116,24 @@ body.login
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 #wrapper
   section
     display none
@@ -124,6 +142,9 @@ body.login
       h2
         animation show-title .3s ease-out
         -webkit-animation show-title .3s ease-out
+      .content
+        animation fade-in 1s ease-out
+        -webkit-animation fade-in 1s ease-out
     h2
       border-bottom 1px solid $color
       color $aside_background
@@ -135,6 +156,35 @@ body.login
       left 0
     .content
       padding 1em
+
+#query-content
+  .content
+    overflow-x auto
+    ul
+      width 900px
+      margin 0
+      padding 0
+      list-style none
+      .column
+        display inline-block
+        &.bid
+          width 50px
+        &.category
+          width 100px
+        &.title
+          width 200px
+        &.press
+          width 200px
+        &.year
+          width 50px
+        &.author
+          width 100px
+        &.price
+          width 100px
+        &.total
+          width 50px
+        &.stock
+          width 50px
 
 #login-content
   .input-span
@@ -167,3 +217,20 @@ body.login
       font-size .5em
       padding 0
       top -1.5em
+  .submit
+    display block
+    height 2em
+    position relative
+    width 300px
+    button
+      border 2px solid transparent
+      background-color transparent
+      display block
+      height 100%
+      width 100%
+      transition all .3s
+      cursor pointer
+      outline 0
+      font-size 1rem
+      &:hover, &:focus, &:active
+        border-color $color

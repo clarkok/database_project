@@ -114,6 +114,14 @@ body.login #admin {
     opacity: 1;
   }
 }
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 #wrapper section {
   display: none;
 }
@@ -123,6 +131,10 @@ body.login #admin {
 #wrapper section.show h2 {
   animation: show-title 0.3s ease-out;
   -webkit-animation: show-title 0.3s ease-out;
+}
+#wrapper section.show .content {
+  animation: fade-in 1s ease-out;
+  -webkit-animation: fade-in 1s ease-out;
 }
 #wrapper section h2 {
   border-bottom: 1px solid #262626;
@@ -136,6 +148,45 @@ body.login #admin {
 }
 #wrapper section .content {
   padding: 1em;
+}
+#query-content .content {
+  overflow-x: auto;
+}
+#query-content .content ul {
+  width: 900px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#query-content .content ul .column {
+  display: inline-block;
+}
+#query-content .content ul .column.bid {
+  width: 50px;
+}
+#query-content .content ul .column.category {
+  width: 100px;
+}
+#query-content .content ul .column.title {
+  width: 200px;
+}
+#query-content .content ul .column.press {
+  width: 200px;
+}
+#query-content .content ul .column.year {
+  width: 50px;
+}
+#query-content .content ul .column.author {
+  width: 100px;
+}
+#query-content .content ul .column.price {
+  width: 100px;
+}
+#query-content .content ul .column.total {
+  width: 50px;
+}
+#query-content .content ul .column.stock {
+  width: 50px;
 }
 #login-content .input-span {
   border-bottom: 2px solid #262626;
@@ -172,6 +223,28 @@ body.login #admin {
   font-size: 0.5em;
   padding: 0;
   top: -1.5em;
+}
+#login-content .submit {
+  display: block;
+  height: 2em;
+  position: relative;
+  width: 300px;
+}
+#login-content .submit button {
+  border: 2px solid transparent;
+  background-color: transparent;
+  display: block;
+  height: 100%;
+  width: 100%;
+  transition: all 0.3s;
+  cursor: pointer;
+  outline: 0;
+  font-size: 1rem;
+}
+#login-content .submit button:hover,
+#login-content .submit button:focus,
+#login-content .submit button:active {
+  border-color: #262626;
 }
 @-moz-keyframes show-title {
   from {
@@ -210,6 +283,38 @@ body.login #admin {
   }
   to {
     padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@-moz-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
