@@ -47,14 +47,24 @@ knex.schema.createTable('book', function(table) {
   table.integer('aid').unsigned().references('aid').inTable('admin');
 })
 
-.catch(function(e) {
-  console.error(e);
-  console.log('There was an error!');
-  console.log('Shutting down...');
-  process.exit(1);
-})
-
 .then(function() {
   console.log('Create tables succeed!');
   return process.exit(0);
+})
+
+.catch(function(e) {
+  console.error(e);
+  console.log('There was an error!');
+  console.log('Rolling back...');
+
+  // drop all generated garbage
+  knex.schema.dropTableIfExists('borrow')
+    .dropTableIfExists('admin')
+    .dropTableIfExists('card')
+    .dropTableIfExists('book')
+    .then(function() {
+      console.log('Shutting down... Please check your database condition');
+      return process.exit(1);
+    });
 });
+
