@@ -1,6 +1,8 @@
 $aside_width = 200px
 $background = #eee
-$aside_background = #262626
+$color = #262626
+
+$aside_background = $color
 $aside_color = $background - #111
 
 html, body
@@ -36,6 +38,8 @@ aside
     padding .5em
   section
     margin-top 1em
+    overflow hidden
+    transition all .5s
     .title
       color $aside_color - #444
       padding-left 1em
@@ -67,7 +71,7 @@ aside
           top 0
           transition all .3s
           width 0
-        &:hover
+        &:hover, &.current
           background-color $aside_background + #333
           color $aside_color + #111
           cursor pointer
@@ -78,39 +82,88 @@ aside
 
 body.unlogin
   #login
-    display block
+    max-height 100%
   #admin
-    display none
+    max-height 0
+    margin-top 0
 
 body.login
   #login
-    display none
+    max-height 0
+    margin-top 0
   #admin
-    display block
+    max-height 100%
+
+@keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
 
 #wrapper
-  padding 1em
-
   section
     display none
-  &.start
-    #start-content
+    &.show
       display block
-  &.query
-    #query-content
-      display block
-  &.login
-    #login-content
-      display block
-  &.borrow
-    #borrow-content
-      display block
-  &.return
-    #return-content
-      display block
-  &.cards
-    #cards-content
-      display block
-  &.books
-    #books-content
-      display block
+      h2
+        animation show-title .3s ease-out
+        -webkit-animation show-title .3s ease-out
+    h2
+      border-bottom 1px solid $color
+      color $aside_background
+      font-size 2em
+      font-weight 300
+      margin 0
+      padding .5em
+      position relative
+      left 0
+    .content
+      padding 1em
+
+#login-content
+  .input-span
+    border-bottom 2px solid $color
+    display block
+    height 2em
+    margin-bottom 1em
+    position relative
+    width 300px
+    input
+      background-color transparent
+      border none
+      font-size 1rem
+      line-height 2em
+      outline 0
+      position relative
+      width 100%
+    label
+      color $color + #777
+      cursor text
+      font-size 1em
+      left 0
+      line-height 2em
+      padding-left .5em
+      position absolute
+      top 0
+      transition all .3s
+    input:active + label, input:focus + label, input.not-empty + label
+      color $color
+      font-size .5em
+      padding 0
+      top -1.5em

@@ -39,6 +39,14 @@ html(lang="zh-CN")
         h2 Query
       section#login-content
         h2 Login
+        .content
+          form(method="POST" action="javascript:void(0)")
+            span.input-span
+              input#username(type="text" name="username")
+              label(for="username") Username
+            span.input-span
+              input#passwd(type="password" name="password")
+              label(for="passwd") Password
       section#borrow-content
         h2 Borrow
       section#return-content

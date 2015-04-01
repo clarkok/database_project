@@ -34,6 +34,8 @@ aside h1 {
 }
 aside section {
   margin-top: 1em;
+  overflow: hidden;
+  transition: all 0.5s;
 }
 aside section .title {
   color: #999;
@@ -73,7 +75,9 @@ aside section ul li > a:visited:after {
   width: 0;
 }
 aside section ul li > a:hover,
-aside section ul li > a:visited:hover {
+aside section ul li > a:visited:hover,
+aside section ul li > a.current,
+aside section ul li > a:visited.current {
   background-color: #595959;
   color: #eee;
   cursor: pointer;
@@ -87,41 +91,125 @@ aside section ul li > a:visited.current:after {
   right: 0;
 }
 body.unlogin #login {
-  display: block;
+  max-height: 100%;
 }
 body.unlogin #admin {
-  display: none;
+  max-height: 0;
+  margin-top: 0;
 }
 body.login #login {
-  display: none;
+  max-height: 0;
+  margin-top: 0;
 }
 body.login #admin {
-  display: block;
+  max-height: 100%;
 }
-#wrapper {
-  padding: 1em;
+@-webkit-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
 }
 #wrapper section {
   display: none;
 }
-#wrapper.start #start-content {
+#wrapper section.show {
   display: block;
 }
-#wrapper.query #query-content {
-  display: block;
+#wrapper section.show h2 {
+  animation: show-title 0.3s ease-out;
+  -webkit-animation: show-title 0.3s ease-out;
 }
-#wrapper.login #login-content {
-  display: block;
+#wrapper section h2 {
+  border-bottom: 1px solid #262626;
+  color: #262626;
+  font-size: 2em;
+  font-weight: 300;
+  margin: 0;
+  padding: 0.5em;
+  position: relative;
+  left: 0;
 }
-#wrapper.borrow #borrow-content {
-  display: block;
+#wrapper section .content {
+  padding: 1em;
 }
-#wrapper.return #return-content {
+#login-content .input-span {
+  border-bottom: 2px solid #262626;
   display: block;
+  height: 2em;
+  margin-bottom: 1em;
+  position: relative;
+  width: 300px;
 }
-#wrapper.cards #cards-content {
-  display: block;
+#login-content .input-span input {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  line-height: 2em;
+  outline: 0;
+  position: relative;
+  width: 100%;
 }
-#wrapper.books #books-content {
-  display: block;
+#login-content .input-span label {
+  color: #9d9d9d;
+  cursor: text;
+  font-size: 1em;
+  left: 0;
+  line-height: 2em;
+  padding-left: 0.5em;
+  position: absolute;
+  top: 0;
+  transition: all 0.3s;
+}
+#login-content .input-span input:active + label,
+#login-content .input-span input:focus + label,
+#login-content .input-span input.not-empty + label {
+  color: #262626;
+  font-size: 0.5em;
+  padding: 0;
+  top: -1.5em;
+}
+@-moz-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@-o-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
 }
