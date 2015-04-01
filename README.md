@@ -32,3 +32,49 @@
 
 4. `node init_database.js` to create essential tables.
 5. `node library.js` and you are good to go.
+
+## Database Structure
+
+### Table: book
+
+Column     |Data Type          |Nullable   |Key
+---        |---                |---        |---
+bid        |int(10) unsigned   |NO         |Primary
+category   |varchar(255)       |YES        |
+title      |varchar(255)       |YES        |
+press      |varchar(255)       |YES        |
+year       |int(11)            |YES        |
+author     |varchar(255)       |YES        |
+price      |decimal(8,2)       |YES        |
+total      |int(11)            |YES        |
+stock      |int(11)            |YES        |
+
+### Table: card
+
+Column     |Data Type                   |Nullable   |Key
+---        |---                         |---        |---
+cid        |int(10) unsigned            |NO         |Primary
+name       |varchar(255)                |NO         |
+unit       |varchar(255)                |YES        |
+category   |enum('teacher','student')   |YES        |
+
+### Table: admin
+
+Column     |Data Type        |Nullable   |Key
+---        |---              |---        |---
+aid        |int(10) unsigned | NO        |Primary
+username   |varchar(255)     | NO        |Unique
+salt       |varchar(255)     | NO        |
+password   |varchar(255)     | NO        |
+phone      |varchar(255)     | YES       |
+
+### Table: borrow
+
+Column      |Data Type         |Nullable    |Key
+---         |---               |---         |---
+id          | int(10) unsigned | NO         |Primary
+bid         | int(10) unsigned | YES        |References book.bid
+cid         | int(10) unsigned | YES        |References card.cid
+borrow_date | datetime         | YES        |
+return_date | datetime         | YES        |
+aid         | int(10) unsigned | YES        |References admin.aid
