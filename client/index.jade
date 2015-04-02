@@ -4,6 +4,7 @@ html(lang="zh-CN")
     meta(charset="utf-8")
     title Library Manage System - Database Project
     link(rel="stylesheet" href="css/style.css")
+    link(rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css")
   body.unlogin
     aside
       h1 Library
@@ -38,7 +39,25 @@ html(lang="zh-CN")
       section#query-content
         h2 Query
         .content
-          ul
+          .filter
+            .switch#query-disp-mode(data-value="list")
+              .choose(data-value="list")
+                i.fa.fa-th-list
+              .choose(data-value="table")
+                i.fa.fa-th
+            form#filter(method="GET" action="javascript:void(0)")
+              ul#query-filter
+                li.title
+                  .column.filter-name
+                    span.title Name
+                  .column.filter-relation
+                    span.title Relation
+                  .column.filter-value
+                    span.title Value
+                li.add
+                  .column.add
+                    span.title +
+          ul#query-main
             li.title
               .column.bid
                 span.title ID
@@ -82,4 +101,5 @@ html(lang="zh-CN")
 
     script(src="js/jquery.js")
     script(src="js/socket.io.js")
+    script(src="js/switch.js")
     script(src="js/script.js")

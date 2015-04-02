@@ -5,6 +5,8 @@ $color = #262626
 $aside_background = $color
 $aside_color = $background - #111
 
+@import 'switch.styl'
+
 html, body
   margin 0
   padding 0
@@ -160,13 +162,53 @@ body.login
 #query-content
   .content
     overflow-x auto
+    .filter
+      margin-bottom 2em
+    #query-disp-mode
+      float right
     ul
-      width 900px
       margin 0
       padding 0
       list-style none
       .column
         display inline-block
+        overflow hidden
+        height 2em
+      li.title
+        border-top 2px solid $color
+        border-bottom 2px solid $color
+        min-height 2em
+        line-height 2em
+        color $background
+        background-color $color
+      li
+        text-align center
+        overflow hidden
+        border-bottom 1px solid $color
+        border-left 1px solid $color
+        border-right 1px solid $color
+        height 0
+        line-height 2em
+        transition all .3s
+        &.show
+          height 2em
+    #query-filter
+      width 500px
+      .column
+        &.filter-name
+          width 200px
+        &.filter-relation
+          width 98px
+        &.filter-value
+          width 200px
+        &.add
+          width 500px
+    #query-main
+      width 100%
+      overflow-x auto
+      li
+        width 900px
+      .column
         &.bid
           width 50px
         &.category
@@ -185,7 +227,6 @@ body.login
           width 50px
         &.stock
           width 50px
-
 #login-content
   .input-span
     border-bottom 2px solid $color
