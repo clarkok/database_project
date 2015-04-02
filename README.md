@@ -46,8 +46,8 @@ press      |varchar(255)       |YES        |
 year       |int(11)            |YES        |
 author     |varchar(255)       |YES        |
 price      |decimal(8,2)       |YES        |
-total      |int(11)            |YES        |
-stock      |int(11)            |YES        |
+total      |int(11)            |NO         |
+stock      |int(11)            |NO         |
 
 ### Table: card
 
@@ -73,8 +73,18 @@ phone      |varchar(255)     | YES       |
 Column      |Data Type         |Nullable    |Key
 ---         |---               |---         |---
 id          | int(10) unsigned | NO         |Primary
-bid         | int(10) unsigned | YES        |References book.bid
-cid         | int(10) unsigned | YES        |References card.cid
-borrow_date | datetime         | YES        |
+bid         | int(10) unsigned | NO         |References book.bid
+cid         | int(10) unsigned | NO         |References card.cid
+borrow_date | datetime         | NO         |
 return_date | datetime         | YES        |
-aid         | int(10) unsigned | YES        |References admin.aid
+aid         | int(10) unsigned | NO         |References admin.aid
+
+### Table: session
+
+Column      |Data Type         |Nullable    |Key
+---         |---               |---         |---
+id          | int(10) unsigned | NO         |Primary
+token       | varchar(255)     | NO         |
+aid         | int(10) unsigned | NO         |References admin.aid
+create_at   | datetime         | NO         |
+expire_at   | datetime         | NO         |

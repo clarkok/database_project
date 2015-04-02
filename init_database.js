@@ -20,8 +20,8 @@ knex.schema.createTable('book', function(table) {
   table.integer('year');
   table.string('author');
   table.decimal('price');
-  table.integer('total');
-  table.integer('stock');
+  table.integer('total').notNullable();
+  table.integer('stock').notNullable();
 })
 
 .createTable('card', function(table) {
@@ -41,18 +41,18 @@ knex.schema.createTable('book', function(table) {
 
 .createTable('borrow', function(table) {
   table.increments('id');
-  table.integer('bid').unsigned().references('bid').inTable('book');
-  table.integer('cid').unsigned().references('cid').inTable('card');
-  table.dateTime('borrow_date').defaultTo(dateUtil.format(new Date(), 'yyyy-MM-dd hh-mm-ss'));
+  table.integer('bid').notNullable().unsigned().references('bid').inTable('book');
+  table.integer('cid').notNullable().unsigned().references('cid').inTable('card');
+  table.dateTime('borrow_date').notNullable();
   table.dateTime('return_date');
-  table.integer('aid').unsigned().references('aid').inTable('admin');
+  table.integer('aid').unsigned().notNullable().references('aid').inTable('admin');
 })
 
 .createTable('session', function(table) {
   table.increments('id');
   table.string('token').notNullable();
-  table.integer('aid').unsigned().references('aid').inTable('admin');
-  table.dateTime('create_at').notNullable().defaultTo(dateUtil.format(new Date(), 'yyyy-MM-dd hh-mm-ss'));
+  table.integer('aid').notNullable().unsigned().references('aid').inTable('admin');
+  table.dateTime('create_at').notNullable();
   table.dateTime('expire_at').notNullable();
 })
 
