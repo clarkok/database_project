@@ -1,4 +1,5 @@
 var db = require('./credential.js');
+var dateUtil = require('./utils/dateUtil.js');
 
 var knex = require('knex')({
   client: 'mysql',
@@ -42,9 +43,17 @@ knex.schema.createTable('book', function(table) {
   table.increments('id');
   table.integer('bid').unsigned().references('bid').inTable('book');
   table.integer('cid').unsigned().references('cid').inTable('card');
-  table.dateTime('borrow_date');
+  table.dateTime('borrow_date').defaultTo(dateUtil.format(new Date(), 'yyyy-MM-dd hh-mm-ss'));
   table.dateTime('return_date');
   table.integer('aid').unsigned().references('aid').inTable('admin');
+})
+
+.createTable('session', function(table) {
+  table.increments('id');
+  table.string('token').notNullable();
+  table.integer('aid').unsigned().references('aid').inTable('admin');
+  table.dateTime('create_at').notNullable().defaultTo(dateUtil.format(new Date(), 'yyyy-MM-dd hh-mm-ss'));
+  table.dateTime('expire_at').notNullable();
 })
 
 .then(function() {
@@ -57,8 +66,9 @@ knex.schema.createTable('book', function(table) {
   console.log('There was an error!');
   console.log('Rolling back...');
 
-  // drop all generated garbage
-  knex.schema.dropTableIfExists('borrow')
+  // drop all generated garbage, order matters
+  knex.schema.dropTableIfExists('session')
+    .dropTableIfExists('borrow')
     .dropTableIfExists('admin')
     .dropTableIfExists('card')
     .dropTableIfExists('book')
