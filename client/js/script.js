@@ -24,69 +24,8 @@ var books = {};
     ).data('original', book);
   };
 
-  var buildBook = buildBookList;
+  route['query'] = new w.List(books, buildBookList, $list, 'b');
 
-  var insertBook = function ($book) {
-    var $current = $list.last();
-
-    // find the property index
-    while ($current.data('original') 
-      && $current.data('original').bid > $book.data('original').bid) {
-      $current = $current.prev('li');
-    }
-
-    $current.append($book);
-
-    // to start transition
-    setTimeout(function () {
-      $book.addClass('show');
-    }, 15);
-  };
-
-  var removeBook = function (book) {
-    var $book = $list.find('#b' + book.bid).attr('id', '');
-    $book.get(0).className = 'hide';
-    $book.on('transitionend', function () {
-      $book.remove();
-    });
-  };
-
-  var updateBooks = function (changes) {
-    if (changes === undefined) {
-      $list.find('.show').remove();
-      Object.getOwnPropertyNames(books).forEach(function (item) {
-        insertBook(buildBook(item));
-      });
-    }
-    else {
-      changes.forEach(function (change) {
-        switch (change.type) {
-          case "add":
-            insertBook(buildBook(change.object[change.name]));
-            break;
-          case "update":
-            removeBook(change.oldValue);
-            insertBook(buildBook(change.object[change.name]));
-            break;
-          case "delete":
-            removeBook(change.oldValue);
-            break;
-          default:
-        };
-      });
-    }
-  };
-
-  route['query'] = {
-    init : function () {
-      Object.observe(books, updateBooks);
-      updateBooks();
-    },
-    deinit : function () {
-      console.log('dinit');
-      Object.unobserve(books, updateBooks);
-    }
-  };
 })(window.jQuery, window);
 
 // login
