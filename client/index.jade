@@ -75,6 +75,7 @@ html(lang="zh-CN")
                 span.title Total
               .column.stock
                 span.stock Stock
+              .column.op
           ul.table#query-main-table
           ul.page-number
       section#login-content
@@ -91,8 +92,24 @@ html(lang="zh-CN")
               button(type="submit") Submit
       section#borrow-content
         h2 Borrow
+        .content
+          .book-info
+          form#borrow-form(method="POST" action="javascript:void(0)")
+            span.input-span
+              input#borrow-cid(type="text" name="cid")
+              label(for="borrow-cid") Card ID
+            span.submit
+              button(type="submit") Borrow
       section#return-content
         h2 Return
+        .content
+          .book-info
+          form#borrow-form(method="POST" action="javascript:void(0)")
+            span.input-span
+              input#borrow-cid(type="text" name="cid")
+              label(for="borrow-cid") Card ID
+            span.submit
+              button(type="submit") Return
       section#cards-content.list-page
         h2 Cards
         .content

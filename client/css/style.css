@@ -19,6 +19,64 @@
   color: #eee;
   background-color: #262626;
 }
+.input-span {
+  border-bottom: 2px solid #262626;
+  display: block;
+  height: 2em;
+  margin-bottom: 1em;
+  position: relative;
+  width: 300px;
+}
+.input-span input {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  line-height: 2em;
+  outline: 0;
+  position: relative;
+  width: 100%;
+}
+.input-span label {
+  color: #9d9d9d;
+  cursor: text;
+  font-size: 1em;
+  left: 0;
+  line-height: 2em;
+  padding-left: 0.5em;
+  position: absolute;
+  top: 0;
+  transition: all 0.3s;
+}
+.input-span input:active + label,
+.input-span input:focus + label,
+.input-span input.not-empty + label {
+  color: #262626;
+  font-size: 0.5em;
+  padding: 0;
+  top: -1.5em;
+}
+.submit {
+  display: block;
+  height: 2em;
+  position: relative;
+  width: 300px;
+}
+.submit button {
+  border: 2px solid transparent;
+  background-color: transparent;
+  display: block;
+  height: 100%;
+  width: 100%;
+  transition: all 0.3s;
+  cursor: pointer;
+  outline: 0;
+  font-size: 1rem;
+}
+.submit button:hover,
+.submit button:focus,
+.submit button:active {
+  border-color: #262626;
+}
 html,
 body {
   margin: 0;
@@ -280,7 +338,7 @@ body.login #admin {
   width: 200px;
 }
 .list-page .content #query-main-list li {
-  width: 900px;
+  width: 1000px;
 }
 .list-page .content #query-main-list .column.bid {
   width: 50px;
@@ -308,6 +366,9 @@ body.login #admin {
 }
 .list-page .content #query-main-list .column.stock {
   width: 50px;
+}
+.list-page .content #query-main-list .column.op {
+  width: 100px;
 }
 .list-page .content #query-main-table {
   margin: 0;
@@ -368,63 +429,34 @@ body.login #admin {
 .list-page .content #query-main-table li .info .positioner p span:after {
   content: " ";
 }
-#login-content .input-span {
-  border-bottom: 2px solid #262626;
-  display: block;
-  height: 2em;
-  margin-bottom: 1em;
+#borrow-content .book-info,
+#return-content .book-info {
+  margin-bottom: 2em;
+  padding-left: 120px;
   position: relative;
-  width: 300px;
+  min-height: 180px;
 }
-#login-content .input-span input {
-  background-color: transparent;
-  border: none;
-  font-size: 1rem;
-  line-height: 2em;
-  outline: 0;
-  position: relative;
-  width: 100%;
-}
-#login-content .input-span label {
-  color: #9d9d9d;
-  cursor: text;
-  font-size: 1em;
-  left: 0;
-  line-height: 2em;
-  padding-left: 0.5em;
+#borrow-content .book-info .cover,
+#return-content .book-info .cover {
+  width: 120px;
+  height: 180px;
   position: absolute;
   top: 0;
-  transition: all 0.3s;
+  left: 0;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
-#login-content .input-span input:active + label,
-#login-content .input-span input:focus + label,
-#login-content .input-span input.not-empty + label {
-  color: #262626;
-  font-size: 0.5em;
-  padding: 0;
-  top: -1.5em;
+#borrow-content .book-info .info,
+#return-content .book-info .info {
+  padding-left: 1em;
 }
-#login-content .submit {
-  display: block;
-  height: 2em;
-  position: relative;
-  width: 300px;
-}
-#login-content .submit button {
-  border: 2px solid transparent;
-  background-color: transparent;
-  display: block;
-  height: 100%;
-  width: 100%;
-  transition: all 0.3s;
-  cursor: pointer;
-  outline: 0;
-  font-size: 1rem;
-}
-#login-content .submit button:hover,
-#login-content .submit button:focus,
-#login-content .submit button:active {
-  border-color: #262626;
+#borrow-content .book-info .info .line > .name,
+#return-content .book-info .info .line > .name {
+  min-width: 150px;
+  display: inline-block;
+  color: #999;
+  font-size: 0.8em;
 }
 @-moz-keyframes show-title {
   from {

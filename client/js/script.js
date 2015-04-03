@@ -115,7 +115,13 @@ var cards = {};
       $('<div />').addClass('column author').text(book.author),
       $('<div />').addClass('column price').text(book.price),
       $('<div />').addClass('column total').text(book.total),
-      $('<div />').addClass('column stock').text(book.stock)
+      $('<div />').addClass('column stock').text(book.stock),
+      $('<div />').addClass('column op').append(
+        $('<a />').attr('href', '#borrow?bid=' + book.bid)
+          .addClass('borrow').text('borrow'),
+        $('<a />').attr('href', '#return?bid=' + book.bid)
+          .addClass('return').text('return')
+      )
     ).data('original', book);
   };
 
@@ -242,14 +248,62 @@ var cards = {};
   };
 })(window.jQuery, window);
 
+var buildBookInfo = function (book) {
+  return $('<div />').addClass('book-info').append(
+    $('<div />').addClass('cover')
+      .css('background-color', 'url(' + book.cover + ')'),
+    $('<div />').addClass('info').append(
+      $('<div />').addClass('line').append(
+        $('<span />').addClass('name').text('Title'),
+        $('<span />').addClass('value').text(book.title)
+      ),
+      $('<div />').addClass('line').append(
+        $('<span />').addClass('name').text('ID'),
+        $('<span />').addClass('value').text(book.bid)
+      ),
+      $('<div />').addClass('line').append(
+        $('<span />').addClass('name').text('Category'),
+        $('<span />').addClass('value').text(book.category)
+      ),
+      $('<div />').addClass('line').append(
+        $('<span />').addClass('name').text('Press'),
+        $('<span />').addClass('value').text(book.press)
+      ),
+      $('<div />').addClass('line').append(
+        $('<span />').addClass('name').text('Year'),
+        $('<span />').addClass('value').text(book.year)
+      ),
+      $('<div />').addClass('line').append(
+        $('<span />').addClass('name').text('Author'),
+        $('<span />').addClass('value').text(book.author)
+      ),
+      $('<div />').addClass('line').append(
+        $('<span />').addClass('name').text('Price'),
+        $('<span />').addClass('value').text(book.price)
+      ),
+      $('<div />').addClass('line').append(
+        $('<span />').addClass('name').text('Stock / Total'),
+        $('<span />').addClass('value').text(book.stock + '/' + book.total)
+      )
+    )
+  );
+};
+
 // borrow
 (function ($, w) {
   route['borrow'] = {
     init : function () {
+      if ($('body').hasClass('unlogin')) {
+        w.location.hash = '#login?redir=' + 
+          encodeURIComponent(w.location.hash.replace('#', ''));
+        return;
+      }
       if (!w.location.query['bid']) {
         w.location.hash = '#query';
         return;
       }
+      $('#borrow-content').find('.book-info')
+        .replaceWith(buildBookInfo(books[parseInt(w.location.query['bid'], 10)]));
     },
     deinit : function () {
     }
@@ -260,10 +314,17 @@ var cards = {};
 (function ($, w) {
   route['return'] = {
     init : function () {
+      if ($('body').hasClass('unlogin')) {
+        w.location.hash = '#login?redir=' + 
+          encodeURIComponent(w.location.hash.replace('#', ''));
+        return;
+      }
       if (!w.location.query['bid']) {
         w.location.hash = '#query';
         return;
       }
+      $('#return-content').find('.book-info')
+        .replaceWith(buildBookInfo(books[parseInt(w.location.query['bid'], 10)]));
     },
     deinit : function () {
     }
