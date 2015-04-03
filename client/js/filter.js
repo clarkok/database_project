@@ -14,7 +14,7 @@
       };
 
       var buildFilterListItem = function () {
-        return $('<li />').append(
+        var $filter_line = $('<li />').append(
           $('<div />').addClass('column filter-name').append(
             $('<span />').addClass('delete').text('-'),
             buildSelectKeys(column_list).addClass('name')
@@ -26,7 +26,13 @@
           $('<div />').addClass('column filter-value').append(
             $('<input />').attr('type', 'text').addClass('value')
           )
-        ).addClass('show');
+        );
+
+        w.setTimeout(function () {
+          $filter_line.addClass('show');
+        }, 30);
+
+        return $filter_line;
       };
 
       var appendFilter = function () {
@@ -53,6 +59,8 @@
     this.each(function () {
       init($(this));
     });
+
+    return this;
   };
 
   $.fn.getFilterArray = function () {

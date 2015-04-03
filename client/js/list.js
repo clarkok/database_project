@@ -3,17 +3,32 @@
 (function ($, w) {
   w.List = function (listenTarget, buildFunc, $list, idPrefix) {
     this.buildFunc = buildFunc;
+    this.$list = $list;
 
     var _this = this;
 
+    var buildFuncWrapper = function (item) {
+      var ret = _this.buildFunc(item);
+      ret.data('id', item.id);
+      ret.attr('id', idPrefix + item.id.toString());
+      return ret;
+    };
+
     var insertFunc = function ($item) {
-      $current = $list.children().last();
+      var $current = _this.$list.children().last();
+      if (!$current.length) {
+        _this.$list.append($item);
+      }
+      else {
+        while ($current.data('id')
+          && $current.data('id') > $item.data('id'))
+          $current = $current.prev('li');
 
-      while ($current.data('id')
-        && $current.data('id') > $item.data('id'))
-        $current = $current.prev('li');
-
-      $current.after($item);
+        if ($current.length)
+          $current.after($item);
+        else
+          _this.$list.prepend($item);
+      }
 
       setTimeout(function () {
         $item.addClass('show');
@@ -21,7 +36,10 @@
     };
 
     var removeFunc = function (item) {
-      var $item = $list.find('#' + idPrefix + item.id).attr('id', '');
+      console.log('#' + idPrefix + item.id);
+      console.log(_this.$list.find('#' + idPrefix + item.id));
+      var $item = _this.$list.find('#' + idPrefix + item.id);
+      $item.attr('id', '');
       $item.get(0).className = 'hide';
       $item.on('transitionend', function () {
         $item.remove();
@@ -30,10 +48,10 @@
 
     var updateFunc = function (changes) {
       if (changes === undefined) {
-        $list.find('.show').remove();
+        _this.$list.find('.show').remove();
         Object.getOwnPropertyNames(listenTarget).forEach(function (name) {
           if (!isNaN(parseFloat(name)) && isFinite(name))
-            insertFunc(_this.buildFunc(listenTarget[name]));
+            insertFunc(buildFuncWrapper(listenTarget[name]));
         });
       }
       else {
@@ -41,17 +59,21 @@
           if (!isNaN(parseFloat(change.name)) && isFinite(change.name))
             switch (change.type) {
               case 'add':
-                insertFunc(_this.buildFunc(change.object[change.name]));
+                insertFunc(buildFuncWrapper(change.object[change.name]));
                 break;
               case 'update':
                 removeFunc(change.oldValue);
-                insertFunc(_this.buildFunc(change.object[change.name]));
+                insertFunc(buildFuncWrapper(change.object[change.name]));
                 break;
               case 'delete':
                 removeFunc(change.oldValue);
                 break;
             }
         });
+
+        setTimeout(function () {
+          _this.$list.trigger('listupdated');
+        }, 45);
       }
     };
 

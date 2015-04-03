@@ -100,10 +100,11 @@ var books = {};
 
 // query
 (function ($, w) {
-  var $list = $('#query-main');
+  var $list = $('#query-main-list');
+  var $table = $('#query-main-table');
 
   var buildBookList = function (book) {
-    return $('<li />').attr('id', 'b' + book.bid).append(
+    return $('<li />').append(
       $('<div />').addClass('column bid').text(book.bid),
       $('<div />').addClass('column category').text(book.category),
       $('<div />').addClass('column title').text(book.title),
@@ -116,6 +117,21 @@ var books = {};
     ).data('original', book);
   };
 
+  var buildBookTable = function (book) {
+    return $('<li />').append(
+      $('<div />').addClass('info').append(
+        $('<div />').addClass('positioner').append(
+          $('<p />').addClass('title').text(book.title),
+          $('<p />').append(
+            $('<span />').addClass('author').text(book.author),
+            $('<span />').addClass('year').text(book.year)
+          ),
+          $('<p />').addClass('press').text(book.press)
+        )
+      )
+    ).data('original', book).css('background-image', 'url(' + book.cover + ')');
+  };
+
   $('#query-filter').filterInit([
     'bid',
     'category',
@@ -126,10 +142,42 @@ var books = {};
     'price',
     'total',
     'stock'
-  ]);
+  ]).on('filterchange', function () {
+  });
 
-  route['query'] = new w.List(books, buildBookList, $list, 'b');
+  var list = new w.List(books, buildBookList, $list, 'b');
+  var table = new w.List(books, buildBookTable, $table, 'bt');
 
+  var reLayout = function () {
+    console.log('re_layout');
+    $table.layout(200, 300, 32, '.show');
+  };
+
+  $('#query-disp-mode').on('change', function () {
+    if ($(this).data('value') == 'list') {
+      $list.show();
+      $table.hide();
+      $(window).off('resize', reLayout);
+      $table.off('listupdated', reLayout);
+    }
+    else {
+      $list.hide();
+      $table.show();
+      $(window).on('resize', reLayout).trigger('resize');
+      $table.on('listupdated', reLayout);
+    }
+  }).trigger('change');
+
+  route['query'] = {
+    init : function () {
+      list.init();
+      table.init();
+    },
+    deinit : function () {
+      list.deinit();
+      table.deinit();
+    }
+  };
 })(window.jQuery, window);
 
 // login
