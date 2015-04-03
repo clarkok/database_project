@@ -179,17 +179,17 @@ body.login #admin {
 #query-content .content #query-disp-mode {
   float: right;
 }
-#query-content .content ul {
+#query-content .content ul.list {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-#query-content .content ul .column {
+#query-content .content ul.list .column {
   display: inline-block;
   overflow: hidden;
   height: 2em;
 }
-#query-content .content ul li.title {
+#query-content .content ul.list li.title {
   border-top: 2px solid #262626;
   border-bottom: 2px solid #262626;
   min-height: 2em;
@@ -197,7 +197,7 @@ body.login #admin {
   color: #eee;
   background-color: #262626;
 }
-#query-content .content ul li {
+#query-content .content ul.list li {
   text-align: center;
   overflow: hidden;
   border-bottom: 1px solid #262626;
@@ -207,11 +207,36 @@ body.login #admin {
   line-height: 2em;
   transition: all 0.3s;
 }
-#query-content .content ul li.show {
+#query-content .content ul.list li.show,
+#query-content .content ul.list li.add {
   height: 2em;
+}
+#query-content .content ul.list li.add:hover {
+  cursor: pointer;
+  font-size: 1.5em;
 }
 #query-content .content #query-filter {
   width: 500px;
+}
+#query-content .content #query-filter .show {
+  position: relative;
+}
+#query-content .content #query-filter .show span.delete {
+  position: absolute;
+  top: 0.5em;
+  left: 1em;
+  height: 1em;
+  width: 1em;
+  line-height: 0.9em;
+  background-color: #f33;
+  border-radius: 1em;
+  color: #eee;
+  border: 1px solid #c33;
+  opacity: 0;
+  transition: all 0.3s;
+}
+#query-content .content #query-filter .show:hover span.delete {
+  opacity: 1;
 }
 #query-content .content #query-filter .column.filter-name {
   width: 200px;

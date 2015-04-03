@@ -46,7 +46,7 @@ html(lang="zh-CN")
               .choose(data-value="table")
                 i.fa.fa-th
             form#filter(method="GET" action="javascript:void(0)")
-              ul#query-filter
+              ul.list#query-filter
                 li.title
                   .column.filter-name
                     span.title Name
@@ -57,7 +57,7 @@ html(lang="zh-CN")
                 li.add
                   .column.add
                     span.title +
-          ul#query-main
+          ul.list#query-main
             li.title
               .column.bid
                 span.title ID
@@ -103,4 +103,5 @@ html(lang="zh-CN")
     script(src="js/socket.io.js")
     script(src="js/switch.js")
     script(src="js/list.js")
+    script(src="js/filter.js")
     script(src="js/script.js")

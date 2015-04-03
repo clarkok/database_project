@@ -75,10 +75,10 @@
       }
     }
   }
-})()
+})();
 
-Object.prototype.update = function (b) {
-  var _this = this;
+var updateObject = function (obj, b) {
+  var _this = obj;
   Object.getOwnPropertyNames(_this).forEach(function (item) {
     if (b.hasOwnProperty(item))
       _this[item] = b[item];
@@ -89,6 +89,7 @@ Object.prototype.update = function (b) {
     if (!_this.hasOwnProperty(item))
       _this[item] = b[item];
   });
+  return obj;
 };
 
 var route = {};
@@ -114,6 +115,18 @@ var books = {};
       $('<div />').addClass('column stock').text(book.stock)
     ).data('original', book);
   };
+
+  $('#query-filter').filterInit([
+    'bid',
+    'category',
+    'title',
+    'press',
+    'year',
+    'author',
+    'price',
+    'total',
+    'stock'
+  ]);
 
   route['query'] = new w.List(books, buildBookList, $list, 'b');
 
@@ -147,6 +160,11 @@ var books = {};
     var hash = window.location.hash;
     var matched = /#([^\?]*)(\?(.*))?/.exec(hash);
 
+    if (!matched) {
+      w.location.hash = "#query";
+      return;
+    }
+
     var hash_name = matched[1];
     var query_body = matched[3];
 
@@ -167,63 +185,3 @@ var books = {};
     $('aside a.' + hash_name).addClass('current');
   }).trigger('hashchange');
 })(window.jQuery, window);
-
-var MOCK_BOOK = [
-  {
-    bid: 0,
-    category: 'category',
-    title: 'title',
-    press: 'press',
-    year: 1995,
-    author: 'Clarkok Zhang',
-    price: 100,
-    total: 100,
-    stock: 99
-  },
-  {
-    bid: 1,
-    category: 'category',
-    title: 'title',
-    press: 'press',
-    year: 1995,
-    author: 'Clarkok Zhang',
-    price: 100,
-    total: 100,
-    stock: 99
-  },
-  {
-    bid: 2,
-    category: 'category',
-    title: 'title',
-    press: 'press',
-    year: 1995,
-    author: 'Clarkok Zhang',
-    price: 100,
-    total: 100,
-    stock: 99
-  },
-  {
-    bid: 20,
-    category: 'category',
-    title: 'title',
-    press: 'press',
-    year: 1995,
-    author: 'Clarkok Zhang',
-    price: 100,
-    total: 100,
-    stock: 99
-  }
-];
-
-setTimeout(function () {
-  alert("test");
-
-  var _books = {};
-
-  MOCK_BOOK.forEach(function (item) {
-    item.id = item.bid;
-    _books[item.id] = item;
-  });
-
-  books.update(books);
-}, 3000);

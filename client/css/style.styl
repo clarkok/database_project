@@ -166,7 +166,7 @@ body.login
       margin-bottom 2em
     #query-disp-mode
       float right
-    ul
+    ul.list
       margin 0
       padding 0
       list-style none
@@ -190,10 +190,32 @@ body.login
         height 0
         line-height 2em
         transition all .3s
-        &.show
+        &.show, &.add
           height 2em
+        &.add:hover
+          cursor pointer
+          font-size 1.5em
     #query-filter
       width 500px
+      .show
+        position relative
+        span.delete
+          position absolute
+          top .5em
+          left 1em
+          height 1em
+          width 1em
+          line-height .9em
+          background-color #f33
+          border-radius 1em
+          color $background
+          border 1px solid #c33
+          opacity 0
+          transition all .3s
+          cursor pointer
+        &:hover
+          span.delete
+            opacity 1
       .column
         &.filter-name
           width 200px

@@ -1,7 +1,12 @@
+"use strict";
+
 (function ($, w) {
   w.List = function (listenTarget, buildFunc, $list, idPrefix) {
+    this.buildFunc = buildFunc;
+
+    var _this = this;
+
     var insertFunc = function ($item) {
-      console.log($item);
       $current = $list.children().last();
 
       while ($current.data('id')
@@ -26,23 +31,21 @@
     var updateFunc = function (changes) {
       if (changes === undefined) {
         $list.find('.show').remove();
-        console.log(listenTarget);
         Object.getOwnPropertyNames(listenTarget).forEach(function (name) {
           if (!isNaN(parseFloat(name)) && isFinite(name))
-            insertFunc(buildFunc(listenTarget[name]));
+            insertFunc(_this.buildFunc(listenTarget[name]));
         });
       }
       else {
-        console.log(changes);
         changes.forEach(function (change) {
           if (!isNaN(parseFloat(change.name)) && isFinite(change.name))
             switch (change.type) {
               case 'add':
-                insertFunc(buildFunc(change.object[change.name]));
+                insertFunc(_this.buildFunc(change.object[change.name]));
                 break;
               case 'update':
                 removeFunc(change.oldValue);
-                insertFunc(buildFunc(change.object[change.name]));
+                insertFunc(_this.buildFunc(change.object[change.name]));
                 break;
               case 'delete':
                 removeFunc(change.oldValue);
