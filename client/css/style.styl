@@ -159,7 +159,7 @@ body.login
     .content
       padding 1em
 
-#query-content
+.list-page
   .content
     overflow-x auto
     .filter
@@ -195,7 +195,7 @@ body.login
         &.add:hover
           cursor pointer
           font-size 1.5em
-    #query-filter
+    #query-filter, #cards-filter
       width 500px
       .show
         position relative
@@ -225,9 +225,22 @@ body.login
           width 200px
         &.add
           width 500px
-    #query-main-list
+    #query-main-list, #cards-main-list
       width 100%
       overflow-x auto
+    #cards-main-list
+      li
+        width 600px
+      .column
+        &.cid
+          width 50px
+        &.c-name
+          width 150px
+        &.unit
+          width 200px
+        &.c-category
+          width 200px
+    #query-main-list
       li
         width 900px
       .column

@@ -170,26 +170,26 @@ body.login #admin {
 #wrapper section .content {
   padding: 1em;
 }
-#query-content .content {
+.list-page .content {
   overflow-x: auto;
 }
-#query-content .content .filter {
+.list-page .content .filter {
   margin-bottom: 2em;
 }
-#query-content .content #query-disp-mode {
+.list-page .content #query-disp-mode {
   float: right;
 }
-#query-content .content ul.list {
+.list-page .content ul.list {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-#query-content .content ul.list .column {
+.list-page .content ul.list .column {
   display: inline-block;
   overflow: hidden;
   height: 2em;
 }
-#query-content .content ul.list li.title {
+.list-page .content ul.list li.title {
   border-top: 2px solid #262626;
   border-bottom: 2px solid #262626;
   min-height: 2em;
@@ -197,7 +197,7 @@ body.login #admin {
   color: #eee;
   background-color: #262626;
 }
-#query-content .content ul.list li {
+.list-page .content ul.list li {
   text-align: center;
   overflow: hidden;
   border-bottom: 1px solid #262626;
@@ -207,21 +207,24 @@ body.login #admin {
   line-height: 2em;
   transition: all 0.3s;
 }
-#query-content .content ul.list li.show,
-#query-content .content ul.list li.add {
+.list-page .content ul.list li.show,
+.list-page .content ul.list li.add {
   height: 2em;
 }
-#query-content .content ul.list li.add:hover {
+.list-page .content ul.list li.add:hover {
   cursor: pointer;
   font-size: 1.5em;
 }
-#query-content .content #query-filter {
+.list-page .content #query-filter,
+.list-page .content #cards-filter {
   width: 500px;
 }
-#query-content .content #query-filter .show {
+.list-page .content #query-filter .show,
+.list-page .content #cards-filter .show {
   position: relative;
 }
-#query-content .content #query-filter .show span.delete {
+.list-page .content #query-filter .show span.delete,
+.list-page .content #cards-filter .show span.delete {
   position: absolute;
   top: 0.5em;
   left: 1em;
@@ -236,62 +239,83 @@ body.login #admin {
   transition: all 0.3s;
   cursor: pointer;
 }
-#query-content .content #query-filter .show:hover span.delete {
+.list-page .content #query-filter .show:hover span.delete,
+.list-page .content #cards-filter .show:hover span.delete {
   opacity: 1;
 }
-#query-content .content #query-filter .column.filter-name {
+.list-page .content #query-filter .column.filter-name,
+.list-page .content #cards-filter .column.filter-name {
   width: 200px;
 }
-#query-content .content #query-filter .column.filter-relation {
+.list-page .content #query-filter .column.filter-relation,
+.list-page .content #cards-filter .column.filter-relation {
   width: 98px;
 }
-#query-content .content #query-filter .column.filter-value {
+.list-page .content #query-filter .column.filter-value,
+.list-page .content #cards-filter .column.filter-value {
   width: 200px;
 }
-#query-content .content #query-filter .column.add {
+.list-page .content #query-filter .column.add,
+.list-page .content #cards-filter .column.add {
   width: 500px;
 }
-#query-content .content #query-main-list {
+.list-page .content #query-main-list,
+.list-page .content #cards-main-list {
   width: 100%;
   overflow-x: auto;
 }
-#query-content .content #query-main-list li {
+.list-page .content #cards-main-list li {
+  width: 600px;
+}
+.list-page .content #cards-main-list .column.cid {
+  width: 50px;
+}
+.list-page .content #cards-main-list .column.c-name {
+  width: 150px;
+}
+.list-page .content #cards-main-list .column.unit {
+  width: 200px;
+}
+.list-page .content #cards-main-list .column.c-category {
+  width: 200px;
+}
+.list-page .content #query-main-list li {
   width: 900px;
 }
-#query-content .content #query-main-list .column.bid {
+.list-page .content #query-main-list .column.bid {
   width: 50px;
 }
-#query-content .content #query-main-list .column.category {
+.list-page .content #query-main-list .column.category {
   width: 100px;
 }
-#query-content .content #query-main-list .column.title {
+.list-page .content #query-main-list .column.title {
   width: 200px;
 }
-#query-content .content #query-main-list .column.press {
+.list-page .content #query-main-list .column.press {
   width: 200px;
 }
-#query-content .content #query-main-list .column.year {
+.list-page .content #query-main-list .column.year {
   width: 50px;
 }
-#query-content .content #query-main-list .column.author {
+.list-page .content #query-main-list .column.author {
   width: 100px;
 }
-#query-content .content #query-main-list .column.price {
+.list-page .content #query-main-list .column.price {
   width: 100px;
 }
-#query-content .content #query-main-list .column.total {
+.list-page .content #query-main-list .column.total {
   width: 50px;
 }
-#query-content .content #query-main-list .column.stock {
+.list-page .content #query-main-list .column.stock {
   width: 50px;
 }
-#query-content .content #query-main-table {
+.list-page .content #query-main-table {
   margin: 0;
   padding: 0;
   list-style: none;
   position: relative;
 }
-#query-content .content #query-main-table:after {
+.list-page .content #query-main-table:after {
   content: " ";
   width: 0;
   height: 0;
@@ -299,7 +323,7 @@ body.login #admin {
   display: block;
   clear: both;
 }
-#query-content .content #query-main-table li {
+.list-page .content #query-main-table li {
   display: block;
   width: 200px;
   height: 300px;
@@ -310,16 +334,16 @@ body.login #admin {
   background-repeat: no-repeat;
   background-position: center;
 }
-#query-content .content #query-main-table li.show {
+.list-page .content #query-main-table li.show {
   opacity: 1;
 }
-#query-content .content #query-main-table li:hover {
+.list-page .content #query-main-table li:hover {
   background-size: contain;
 }
-#query-content .content #query-main-table li:hover .info {
+.list-page .content #query-main-table li:hover .info {
   opacity: 0.3;
 }
-#query-content .content #query-main-table li .info {
+.list-page .content #query-main-table li .info {
   display: block;
   width: 100%;
   height: 100%;
@@ -332,16 +356,16 @@ body.login #admin {
   color: #fff;
   transition: all 0.3s;
 }
-#query-content .content #query-main-table li .info .positioner {
+.list-page .content #query-main-table li .info .positioner {
   box-sizing: border-box;
   padding: 1em;
   position: absolute;
   bottom: 0;
 }
-#query-content .content #query-main-table li .info .positioner p {
+.list-page .content #query-main-table li .info .positioner p {
   margin: 0;
 }
-#query-content .content #query-main-table li .info .positioner p span:after {
+.list-page .content #query-main-table li .info .positioner p span:after {
   content: " ";
 }
 #login-content .input-span {

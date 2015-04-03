@@ -97,6 +97,7 @@ var route = {};
 var $wrapper = $('#wrapper');
 
 var books = {};
+var cards = {};
 
 // query
 (function ($, w) {
@@ -104,6 +105,7 @@ var books = {};
   var $table = $('#query-main-table');
 
   var buildBookList = function (book) {
+    book.id = book.bid;
     return $('<li />').append(
       $('<div />').addClass('column bid').text(book.bid),
       $('<div />').addClass('column category').text(book.category),
@@ -118,6 +120,7 @@ var books = {};
   };
 
   var buildBookTable = function (book) {
+    book.id = book.bid;
     return $('<li />').append(
       $('<div />').addClass('info').append(
         $('<div />').addClass('positioner').append(
@@ -180,6 +183,44 @@ var books = {};
   };
 })(window.jQuery, window);
 
+// cards
+(function ($, w) {
+  var $list = $('#cards-main-list');
+
+  var buildCardList = function (card) {
+    card.id = card.cid;
+    return $('<li />').append(
+      $('<div />').addClass('column cid').text(card.cid),
+      $('<div />').addClass('column c-name').text(card.name),
+      $('<div />').addClass('column unit').text(card.unit),
+      $('<div />').addClass('column c-category').text(card.category)
+    ).data('original', card);
+  };
+
+  $('#cards-filter').filterInit([
+    'cid',
+    'name',
+    'unit',
+    'category'
+  ]).on('filterchange', function () {
+  });
+
+  var list = new w.List(cards, buildCardList, $list, 'b');
+
+  route['cards'] = {
+    init : function () {
+      if ($('body').hasClass('unlogin')) {
+        w.location.hash = '#query';
+        return;
+      }
+      list.init();
+    },
+    deinit : function () {
+      list.deinit();
+    }
+  };
+})(window.jQuery, window);
+
 // login
 (function ($, w) {
   var $login = $('#login-content');
@@ -201,6 +242,34 @@ var books = {};
   };
 })(window.jQuery, window);
 
+// borrow
+(function ($, w) {
+  route['borrow'] = {
+    init : function () {
+      if (!w.location.query['bid']) {
+        w.location.hash = '#query';
+        return;
+      }
+    },
+    deinit : function () {
+    }
+  };
+})(window.jQuery, window);
+
+// return
+(function ($, w) {
+  route['return'] = {
+    init : function () {
+      if (!w.location.query['bid']) {
+        w.location.hash = '#query';
+        return;
+      }
+    },
+    deinit : function () {
+    }
+  };
+})(window.jQuery, window);
+
 (function ($, w) {
   var original_hash = "";
 
@@ -215,6 +284,8 @@ var books = {};
 
     var hash_name = matched[1];
     var query_body = matched[3];
+
+    w.location.query = w.parseQuery(query_body);
 
     if (route.hasOwnProperty(original_hash)) {
       route[original_hash].deinit();

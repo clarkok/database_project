@@ -30,13 +30,11 @@ html(lang="zh-CN")
           li
             a.cards(href="#cards") Cards
           li
-            a.books(href="#books") Books
-          li
             a.logout(href="#logout") Logout
     #wrapper.start
       section#start-content
         h2 Welcome
-      section#query-content
+      section#query-content.list-page
         h2 Query
         .content
           .filter
@@ -95,10 +93,33 @@ html(lang="zh-CN")
         h2 Borrow
       section#return-content
         h2 Return
-      section#cards-content
+      section#cards-content.list-page
         h2 Cards
-      section#books-content
-        h2 Books
+        .content
+          .filter
+            form#cards-filter-wrapper(method="GET" action="javascript:void(0)")
+              ul.list#cards-filter
+                li.title
+                  .column.filter-name
+                    span.title Name
+                  .column.filter-relation
+                    span.title Relation
+                  .column.filter-value
+                    span.title Value
+                li.add
+                  .column.add
+                    span.title +
+          ul.list#cards-main-list
+            li.title
+              .column.cid
+                span.title ID
+              .column.c-name
+                span.title Name
+              .column.unit
+                span.title Unit
+              .column.c-category
+                span.title Category
+          ul.page-number
 
     script(src="js/jquery.js")
     script(src="js/socket.io.js")
@@ -106,4 +127,5 @@ html(lang="zh-CN")
     script(src="js/list.js")
     script(src="js/filter.js")
     script(src="js/layout.js")
+    script(src="js/query.js")
     script(src="js/script.js")
