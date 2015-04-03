@@ -1,13 +1,12 @@
 (function ($, w) {
   w.List = function (listenTarget, buildFunc, $list, idPrefix) {
     var insertFunc = function ($item) {
-      $current = $list.children('li:last-child');
+      console.log($item);
+      $current = $list.children().last();
 
       while ($current.data('id')
         && $current.data('id') > $item.data('id'))
         $current = $current.prev('li');
-
-      console.log($current);
 
       $current.after($item);
 
@@ -27,36 +26,38 @@
     var updateFunc = function (changes) {
       if (changes === undefined) {
         $list.find('.show').remove();
-        Object.getOwnPropertyNames(listenTarget).forEach(function (item) {
-          insertFunc(buildFunc(item));
+        console.log(listenTarget);
+        Object.getOwnPropertyNames(listenTarget).forEach(function (name) {
+          if (!isNaN(parseFloat(name)) && isFinite(name))
+            insertFunc(buildFunc(listenTarget[name]));
         });
       }
       else {
+        console.log(changes);
         changes.forEach(function (change) {
-          switch (change.type) {
-            case 'add':
-              insertFunc(buildFunc(change.object[change.name]));
-              break;
-            case 'update':
-              removeFunc(change.oldValue);
-              insertFunc(buildFunc(change.object[change.name]));
-              break;
-            case 'delete':
-              removeFunc(change.oldValue);
-              break;
-          }
+          if (!isNaN(parseFloat(change.name)) && isFinite(change.name))
+            switch (change.type) {
+              case 'add':
+                insertFunc(buildFunc(change.object[change.name]));
+                break;
+              case 'update':
+                removeFunc(change.oldValue);
+                insertFunc(buildFunc(change.object[change.name]));
+                break;
+              case 'delete':
+                removeFunc(change.oldValue);
+                break;
+            }
         });
       }
     };
 
     this.init = function () {
-      console.log('list init');
       Object.observe(listenTarget, updateFunc);
       updateFunc();
     };
 
     this.deinit = function () {
-      console.log('list deinit');
       Object.unobserve(listenTarget, updateFunc);
     }
   };

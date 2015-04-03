@@ -22,5 +22,4 @@
   };
 
   var $sw = $('.switch').switchInit();
-  console.log($sw);
 })(window.jQuery, window);
