@@ -4,7 +4,7 @@ var dateUtil = require('./utils/dateUtil.js');
 var knex = require('knex')({
   client: 'mysql',
   connection: {
-    host: '127.0.0.1',
+    host: db.host,
     user: db.user,
     password: db.password,
     database: db.database

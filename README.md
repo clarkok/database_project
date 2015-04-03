@@ -24,10 +24,11 @@
 
     ```js
     module.exports = {
+        host: '<host_name or IP address>',
         user: '<user_name>',
         password: '<some_password>',
         database: '<database_name>'
-    }
+    };
     ```
 
 4. `node init_database.js` to create essential tables.
