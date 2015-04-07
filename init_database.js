@@ -58,7 +58,7 @@ knex.schema.createTable('book', function(table) {
 
 .then(function() {
   console.log('Create tables succeed!');
-  return process.exit(0);
+  process.exit(0);
 })
 
 .catch(function(e) {
@@ -74,7 +74,7 @@ knex.schema.createTable('book', function(table) {
     .dropTableIfExists('book')
     .then(function() {
       console.log('Shutting down... Please check your database condition');
-      return process.exit(1);
+      process.exit(1);
     });
 });
 
