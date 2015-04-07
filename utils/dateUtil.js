@@ -1,8 +1,6 @@
-var dateUtil = [];
-
-dateUtil.format = function(date, format) {
-  if (format === undefined) {
-    format = date;
+var format = function(date, pattern) {
+  if (pattern === undefined) {
+    pattern = date;
     date = new Date();
   }
   var map = {
@@ -13,7 +11,7 @@ dateUtil.format = function(date, format) {
     "s": date.getSeconds()
   };
 
-  format = format.replace(/([yMdhms])+/g, function(match, current) {
+  pattern = pattern.replace(/([yMdhms])+/g, function(match, current) {
     var t = map[current];
     if (t !== undefined) {
       if (match.length > 1) {
@@ -28,7 +26,7 @@ dateUtil.format = function(date, format) {
     return match;
   });
 
-  return format;
+  return pattern;
 };
 
-module.exports = dateUtil;
+module.exports.format = format;
