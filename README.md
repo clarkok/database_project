@@ -89,3 +89,32 @@ token       | varchar(255)     | NO         |
 aid         | int(10) unsigned | NO         |References admin.aid
 create_at   | datetime         | NO         |
 expire_at   | datetime         | NO         |
+
+## API
+
+### Admin login
+
+```
+POST /login
+```
+
+**Response**
+
+- Succeed
+
+```json
+{
+    code: 0,
+    id: <int>,
+    aid: <int>,
+    token: <string>
+}
+```
+
+- Fail
+
+```json
+{
+    code: 1
+}
+```
