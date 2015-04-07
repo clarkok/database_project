@@ -104,10 +104,10 @@ POST /login
 
 ```json
 {
-    code: 0,
-    id: <int>,
-    aid: <int>,
-    token: <string>
+    "code": 0,
+    "id": 12345,
+    "aid": 23333,
+    "token": "sadfkjahsdf8asdf89123khefdi9wdfy92134h12k3h91231239df"
 }
 ```
 
@@ -115,6 +115,6 @@ POST /login
 
 ```json
 {
-    code: 1
+    "code": 1
 }
 ```
