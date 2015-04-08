@@ -23,6 +23,7 @@ function adminLogin(user) {
       if (rows.length === 0) {
         throw new Error("Can't find username");
       }
+      // Username found, calculate hash
       var hash = crypto.createHash('sha1');
       user.password = hash.update(rows[0].salt).update(user.password).digest('hex');
       
@@ -33,28 +34,33 @@ function adminLogin(user) {
           password: user.password
         })
         .then(function(rows) {
+          if (rows.length === 0) {
+            throw new Error("Wrong password");
+          }
+          // Auth succeed, create session
           user.aid = rows[0].aid;
-          crypto.randomBytes(128).then(function(buffer) {
-            user.token = buffor.toString('hex');
+          return crypto.randomBytesAsync(128).then(function(buffer) {
+            user.token = buffer.toString('hex');
             
             var create = new Date();
             var expire = new Date();
             expire.setMinutes(expire.getMinutes() + 30);
-            knex('session').insert({
+            return knex('session').insert({
               token: user.token,
               aid: user.aid,
               create_at: dateUtil.format(create, 'yyyy-MM-dd hh:mm:ss'),
               expire_at: dateUtil.format(expire, 'yyyy-MM-dd hh:mm:ss')
+            }).then(function(result) {
+              console.log(result);
+              user.id = result[0];
+              return user;
             });
-
-            return user;
           })
           .catch(function(err) {
-            console.log("Crypto error!");
+            console.log("Token generate failed!");
             console.error(err.stack);
             return err;
           });
-          return user;
         });
     });
 

@@ -36,13 +36,15 @@ library.post('/login', function(req, res, next) {
       });
     })
     .catch(function(err) {
+      console.log("Auth error");
+      console.log(err.stack);
       res.json({
         code: 1
       });
     });
 });
 
-library.use(function(err, req, res) {
+library.use(function(req, res) {
   res.status(500).send('Something broke');
 });
 
