@@ -1,10 +1,10 @@
 var express = require('express');
 var library = express();
 var server = require('http').createServer(library);
-var io = require('socket.io')(server);
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var model = require('./model');
+var controller = require('./controller');
 
 library.use(logger('dev'));
 library.use(express.static(__dirname + '/client'));
@@ -42,6 +42,8 @@ library.post('/login', function(req, res, next) {
       });
     });
 });
+
+controller(server);
 
 library.use(function(req, res, next) {
   res.status(404).send('Nothing found');
