@@ -7,11 +7,10 @@ var bodyParser = require('body-parser');
 var model = require('./model');
 
 library.use(logger('dev'));
-library.use(express.static(__dirname + '/public'));
+library.use(express.static(__dirname + '/client'));
 
 library.use(bodyParser.json());
 library.use(bodyParser.urlencoded());
-//library.use('views', './views');
 
 //Routing
 
@@ -44,7 +43,11 @@ library.post('/login', function(req, res, next) {
     });
 });
 
-library.use(function(req, res) {
+library.use(function(req, res, next) {
+  res.status(404).send('Nothing found');
+});
+
+library.use(function(err, req, res, next) {
   res.status(500).send('Something broke');
 });
 
