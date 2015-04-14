@@ -36,7 +36,7 @@ login: [POST]
 
 query:
   {
-  [{column, operator, value}],
+  conditions: [{column, operator, value}],
   sort_by,
   order,
   page

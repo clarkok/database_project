@@ -1,4 +1,4 @@
-var db = require("./credential");
+var credential = require("./credential");
 var Bluebird = require("bluebird");
 var crypto = Bluebird.promisifyAll(require("crypto"));
 var dateUtil = require("./utils/dateUtil");
@@ -6,12 +6,16 @@ var dateUtil = require("./utils/dateUtil");
 var knex = require('knex')({
   client: 'mysql',
   connection: {
-    host: db.host,
-    user: db.user,
-    password: db.password,
-    database: db.database
+    host: credential.db.host,
+    user: credential.db.user,
+    password: credential.db.password,
+    database: credential.db.database
   }
 });
+
+exports = module.exports;
+
+exports.adminLogin = adminLogin;
 
 function adminLogin(user) {
   console.log(user.username + " is trying to login using password: " + user.password);
@@ -39,32 +43,33 @@ function adminLogin(user) {
           }
           // Auth succeed, create session
           user.aid = rows[0].aid;
-          return crypto.randomBytesAsync(128).then(function(buffer) {
-            user.token = buffer.toString('hex');
-            
-            var create = new Date();
-            var expire = new Date();
-            expire.setMinutes(expire.getMinutes() + 30);
-            return knex('session').insert({
-              token: user.token,
-              aid: user.aid,
-              create_at: dateUtil.format(create, 'yyyy-MM-dd hh:mm:ss'),
-              expire_at: dateUtil.format(expire, 'yyyy-MM-dd hh:mm:ss')
-            }).then(function(result) {
-              console.log(result);
-              user.id = result[0];
-              return user;
-            });
-          })
-          .catch(function(err) {
-            console.log("Token generate failed!");
-            console.error(err.stack);
-            return err;
-          });
-        });
+          return user;
+        })
     });
-
 }
 
-module.exports.connect = knex;
-module.exports.adminLogin = adminLogin;
+var eventMap = {
+  'query': 'query',
+  'borrow': 'borrow',
+  'return': 'returnBook',
+  'books': 'books',
+  'list_card': 'listCard',
+  'new_card': 'createCard',
+  'delete_card': 'deleteCard',
+  'new_book': 'createBook',
+  'new_books': 'bulkCreateBook',
+  'delete_books': 'deleteBooks'
+};
+
+exports.query = query;
+
+function query(query) {
+  var action = {
+    query: function(data) {
+      return data.conditions.reduce(function(prev, current) {
+        return prev.where(current.column, current.operator, current.value);
+      }, knex('books'));
+    }
+  };
+  return action[query.action](query.data);
+}

@@ -3,11 +3,24 @@ var library = express();
 var server = require('http').createServer(library);
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var SessionStore = require('express-mysql-session');
 var model = require('./model');
 var controller = require('./controller');
+var credential = require('./credential');
 
 library.use(logger('dev'));
 library.use(express.static(__dirname + '/client'));
+
+var sessionStore = new SessionStore(credential.db);
+
+library.use(session({
+  key: credential.session.key,
+  secret: credential.session.secret,
+  store: sessionStore,
+  resave: true,
+  saveUninitialized: true
+}));
 
 library.use(bodyParser.json());
 library.use(bodyParser.urlencoded());
@@ -26,12 +39,13 @@ library.post('/login', function(req, res, next) {
   };
 
   model.adminLogin(user)
-    .then(function(session) {
+    .then(function(user) {
+      var sess = req.session;
+      sess.loggedIn = true;
+      sess.username = user.username;
+      sess.aid = user.aid;
       res.status(200).json({
         code: 0,
-        id: session.id,
-        aid: session.aid,
-        token: session.token
       });
     })
     .catch(function(err) {

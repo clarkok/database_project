@@ -48,14 +48,6 @@ knex.schema.createTable('book', function(table) {
   table.integer('aid').unsigned().notNullable().references('aid').inTable('admin');
 })
 
-.createTable('session', function(table) {
-  table.increments('id');
-  table.string('token').notNullable();
-  table.integer('aid').notNullable().unsigned().references('aid').inTable('admin');
-  table.dateTime('create_at').notNullable();
-  table.dateTime('expire_at').notNullable();
-})
-
 .then(function() {
   console.log('Create tables succeed!');
   process.exit(0);
@@ -67,8 +59,7 @@ knex.schema.createTable('book', function(table) {
   console.log('Rolling back...');
 
   // drop all generated garbage, order matters
-  knex.schema.dropTableIfExists('session')
-    .dropTableIfExists('borrow')
+  Knex.schema.dropTableIfExists('borrow')
     .dropTableIfExists('admin')
     .dropTableIfExists('card')
     .dropTableIfExists('book')

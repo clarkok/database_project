@@ -20,14 +20,22 @@
     grant all privileges on <database_name>.* to '<user_name>'@'localhost';
     ```
 
-3. Create a `credential.js` file in the project directory (i.e. `./`) which stores your database information:
+3. Create a `credential.js` file in the project directory (i.e. `./`) which stores your database and session configuration:
 
     ```js
     module.exports = {
-        host: '<host_name or IP address>',
-        user: '<user_name>',
-        password: '<some_password>',
-        database: '<database_name>'
+        db: {
+            host: '<host_name or IP address>',
+            port: <database_port>,
+            user: '<user_name>',
+            password: '<some_password>',
+            database: '<database_name>'
+        },
+
+        session: {
+            key: '<session_name>';
+            secret: '<session_secret>';
+        }
     };
     ```
 
@@ -105,9 +113,6 @@ POST /login
 ```json
 {
     "code": 0,
-    "id": 12345,
-    "aid": 23333,
-    "token": "sadfkjahsdf8asdf89123khefdi9wdfy92134h12k3h91231239df"
 }
 ```
 
@@ -118,3 +123,14 @@ POST /login
     "code": 1
 }
 ```
+
+### Socket
+
+```
+socket.emit('query', query);
+```
+
+- **Object: query**
+    - action:
+        - `query`, `borrow`, `return`, `books`, `list_card`, `new_card`, `new_card`, `delete_card`, `new_book`, `new_books`, `delete_books`
+    - data
