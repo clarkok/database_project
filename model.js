@@ -1,7 +1,6 @@
 var credential = require("./credential");
-var Bluebird = require("bluebird");
-var crypto = Bluebird.promisifyAll(require("crypto"));
-var dateUtil = require("./utils/dateUtil");
+var crypto = require("crypto");
+var dataUtil = require("./utils/dateUtil");
 
 var knex = require('knex')({
   client: 'mysql',
@@ -44,7 +43,7 @@ function adminLogin(user) {
           // Auth succeed, create session
           user.aid = rows[0].aid;
           return user;
-        })
+        });
     });
 }
 
@@ -61,6 +60,12 @@ var eventMap = {
   'delete_books': 'deleteBooks'
 };
 
+function checkPrivilege(data) {
+  if (!data.aid) {
+    throw new Error("Unauthorized action!");
+  }
+}
+
 exports.query = query;
 
 function query(query) {
@@ -68,8 +73,74 @@ function query(query) {
     query: function(data) {
       return data.conditions.reduce(function(prev, current) {
         return prev.where(current.column, current.operator, current.value);
-      }, knex('books'));
+      }, knex('book'));
+    },
+
+    borrow: function(data) {
+      checkPrivilege(data);
+      return knex('borrow').insert({
+        aid: data.aid,
+        bid: data.bid,
+        cid: data.cid,
+        borrow_date: dateUtil('yyyy-MM-dd hh:mm:ss')
+      });
+    },
+
+    returnBook: function(data) {
+      return knex('borrow').where({
+        bid: data.bid,
+        cid: data.cid
+      }).update({
+        return_data: dateUtil('yyyy-MM-dd hh:mm:ss')
+      });
+    },
+
+    books: function(data) {
+      checkPrivilege(data);
+      return knex('borrow').leftOuterJoin('book', 'borrow.bid', 'book.bid')
+        .where({
+          cid: data.cid,
+          return_date: null
+        });
+    },
+
+    listCard: function(data) {
+      checkPrivilege(data);
+      return knex('card');
+    },
+
+    createCard: function(data) {
+      checkPrivilege(data);
+      return knex('card').insert({
+        name: data.name,
+        unit: data.unit,
+        category: data.category
+      });
+    },
+
+    deleteCard: function(data) {
+      checkPrivilege(data);
+      return knex('card')
+        .where({
+          cid: data.cid
+        })
+        .del();
+    },
+
+    createBook: function(data) {
+      checkPrivilege(data);
+      return knex('book')
+        .insert({
+          category: data.category,
+          title: data.title,
+          press: data.press,
+          year: data.year,
+          author: data.author,
+          price: data.price,
+          total: data.total,
+          stock: data.total
+        });
     }
   };
-  return action[query.action](query.data);
+  return action[eventMap[query.action]](query.data);
 }
