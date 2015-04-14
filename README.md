@@ -88,16 +88,6 @@ borrow_date | datetime         | NO         |
 return_date | datetime         | YES        |
 aid         | int(10) unsigned | NO         |References admin.aid
 
-### Table: session
-
-Column      |Data Type         |Nullable    |Key
----         |---               |---         |---
-id          | int(10) unsigned | NO         |Primary
-token       | varchar(255)     | NO         |
-aid         | int(10) unsigned | NO         |References admin.aid
-create_at   | datetime         | NO         |
-expire_at   | datetime         | NO         |
-
 ## API
 
 ### Admin login
