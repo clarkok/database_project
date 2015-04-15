@@ -59,7 +59,7 @@ knex.schema.createTable('book', function(table) {
   console.log('Rolling back...');
 
   // drop all generated garbage, order matters
-  Knex.schema.dropTableIfExists('borrow')
+  knex.schema.dropTableIfExists('borrow')
     .dropTableIfExists('admin')
     .dropTableIfExists('card')
     .dropTableIfExists('book')
