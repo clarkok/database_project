@@ -11,7 +11,10 @@ var controller = function(server) {
         query.data.aid = socket.request.session.aid;
       }
       model.query(query)
-        .then(function(result) {
+        .then(function(data) {
+          var result = {};
+          result.action = query.action;
+          result.data = data;
           socket.emit('query', result);
         })
         .catch(function(err) {
