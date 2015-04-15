@@ -7,7 +7,9 @@ var controller = function(server) {
 
     // client request a query
     socket.on('query', function(query) {
-      query.data.aid = socket.request.session.aid;
+      if (socket.request.session && socket.request.session.aid) {
+        query.data.aid = socket.request.session.aid;
+      }
       model.query(query)
         .then(function(result) {
           socket.emit('query', result);
