@@ -1,7 +1,59 @@
 $aside_width = 200px
 $background = #eee
-$aside_background = #262626
+$color = #262626
+
+$aside_background = $color
 $aside_color = $background - #111
+
+@import 'switch.styl'
+
+.input-span
+  border-bottom 2px solid $color
+  display block
+  height 2em
+  margin-bottom 1em
+  position relative
+  width 300px
+  input
+    background-color transparent
+    border none
+    font-size 1rem
+    line-height 2em
+    outline 0
+    position relative
+    width 100%
+  label
+    color $color + #777
+    cursor text
+    font-size 1em
+    left 0
+    line-height 2em
+    padding-left .5em
+    position absolute
+    top 0
+    transition all .3s
+  input:active + label, input:focus + label, input.not-empty + label
+    color $color
+    font-size .5em
+    padding 0
+    top -1.5em
+.submit
+  display block
+  height 2em
+  position relative
+  width 300px
+  button
+    border 2px solid transparent
+    background-color transparent
+    display block
+    height 100%
+    width 100%
+    transition all .3s
+    cursor pointer
+    outline 0
+    font-size 1rem
+    &:hover, &:focus, &:active
+      border-color $color
 
 html, body
   margin 0
@@ -36,6 +88,8 @@ aside
     padding .5em
   section
     margin-top 1em
+    overflow hidden
+    transition all .5s
     .title
       color $aside_color - #444
       padding-left 1em
@@ -67,7 +121,7 @@ aside
           top 0
           transition all .3s
           width 0
-        &:hover
+        &:hover, &.current
           background-color $aside_background + #333
           color $aside_color + #111
           cursor pointer
@@ -78,39 +132,255 @@ aside
 
 body.unlogin
   #login
-    display block
+    max-height 100%
   #admin
-    display none
+    max-height 0
+    margin-top 0
 
 body.login
   #login
-    display none
+    max-height 0
+    margin-top 0
   #admin
-    display block
+    max-height 100%
+
+@keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 #wrapper
-  padding 1em
-
   section
     display none
-  &.start
-    #start-content
+    &.show
       display block
-  &.query
-    #query-content
-      display block
-  &.login
-    #login-content
-      display block
-  &.borrow
-    #borrow-content
-      display block
-  &.return
-    #return-content
-      display block
-  &.cards
-    #cards-content
-      display block
-  &.books
-    #books-content
-      display block
+      h2
+        animation show-title .3s ease-out
+        -webkit-animation show-title .3s ease-out
+      .content
+        animation fade-in 1s ease-out
+        -webkit-animation fade-in 1s ease-out
+    h2
+      border-bottom 1px solid $color
+      color $aside_background
+      font-size 2em
+      font-weight 300
+      margin 0
+      padding .5em
+      position relative
+      left 0
+    .content
+      padding 1em
+
+.list-page
+  .content
+    overflow-x auto
+    .filter
+      margin-bottom 2em
+    #query-disp-mode
+      float right
+    ul.list
+      margin 0
+      padding 0
+      list-style none
+      .column
+        display inline-block
+        overflow hidden
+        height 2em
+      li.title
+        border-top 2px solid $color
+        border-bottom 2px solid $color
+        min-height 2em
+        line-height 2em
+        color $background
+        background-color $color
+      li
+        text-align center
+        overflow hidden
+        border-bottom 1px solid $color
+        border-left 1px solid $color
+        border-right 1px solid $color
+        height 0
+        line-height 2em
+        transition all .3s
+        &.show, &.add
+          height 2em
+        &.add:hover
+          cursor pointer
+          font-size 1.5em
+    #query-filter, #cards-filter
+      width 500px
+      .show
+        position relative
+        span.delete
+          position absolute
+          top .5em
+          left 1em
+          height 1em
+          width 1em
+          line-height .9em
+          background-color #f33
+          border-radius 1em
+          color $background
+          border 1px solid #c33
+          opacity 0
+          transition all .3s
+          cursor pointer
+        &:hover
+          span.delete
+            opacity 1
+      .column
+        &.filter-name
+          width 200px
+        &.filter-relation
+          width 98px
+        &.filter-value
+          width 200px
+        &.add
+          width 500px
+    #query-main-list, #cards-main-list
+      width 100%
+      overflow-x auto
+    #cards-main-list
+      li
+        width 600px
+      .column
+        &.cid
+          width 50px
+        &.c-name
+          width 150px
+        &.unit
+          width 200px
+        &.c-category
+          width 200px
+    #query-main-list
+      li
+        width 1000px
+      .column
+        &.bid
+          width 50px
+        &.category
+          width 100px
+        &.title
+          width 200px
+        &.press
+          width 200px
+        &.year
+          width 50px
+        &.author
+          width 100px
+        &.price
+          width 100px
+        &.total
+          width 50px
+        &.stock
+          width 50px
+        &.op
+          width 100px
+    #query-main-table
+      margin 0
+      padding 0
+      list-style none
+      position relative
+      &:after
+        content " "
+        width 0
+        height 0
+        overflow hidden
+        display block
+        clear both
+      li
+        display block
+        width 200px
+        height 300px
+        position absolute
+        opacity 0
+        transition all .3s
+        background-size cover
+        background-repeat no-repeat
+        background-position center
+        &.show
+          opacity 1
+        &:hover
+          background-size contain
+          .info
+            opacity 0.3
+        .info
+          display block
+          width 100%
+          height 100%
+          position absolute
+          top 0
+          left 0
+          opacity 0
+          z-index 5
+          background-color black
+          color white
+          transition all .3s
+          .positioner
+            box-sizing border-box
+            padding 1em
+            position absolute
+            bottom 0
+            p
+              margin 0
+              span:after
+                content " "
+
+#borrow-content, #return-content
+  .book-info
+    margin-bottom 2em
+    padding-left 120px
+    position relative
+    min-height 180px
+    .cover
+      width 120px
+      height 180px
+      position absolute
+      top 0
+      left 0
+      background-position center
+      background-size contain
+      background-repeat no-repeat
+    .info
+      padding-left 1em
+      .line > .name
+        min-width 150px
+        display inline-block
+        color #999
+        font-size .8em

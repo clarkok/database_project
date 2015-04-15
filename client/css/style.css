@@ -1,3 +1,82 @@
+.switch {
+  border: 1px solid #262626;
+  width: 4em;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.switch .choose {
+  display: inline-block;
+  width: 2em;
+  height: 1.5em;
+  line-height: 1.5em;
+  text-align: center;
+  color: #262626;
+  background-color: #eee;
+  transition: all 0.3s;
+}
+.switch .choose.select {
+  color: #eee;
+  background-color: #262626;
+}
+.input-span {
+  border-bottom: 2px solid #262626;
+  display: block;
+  height: 2em;
+  margin-bottom: 1em;
+  position: relative;
+  width: 300px;
+}
+.input-span input {
+  background-color: transparent;
+  border: none;
+  font-size: 1rem;
+  line-height: 2em;
+  outline: 0;
+  position: relative;
+  width: 100%;
+}
+.input-span label {
+  color: #9d9d9d;
+  cursor: text;
+  font-size: 1em;
+  left: 0;
+  line-height: 2em;
+  padding-left: 0.5em;
+  position: absolute;
+  top: 0;
+  transition: all 0.3s;
+}
+.input-span input:active + label,
+.input-span input:focus + label,
+.input-span input.not-empty + label {
+  color: #262626;
+  font-size: 0.5em;
+  padding: 0;
+  top: -1.5em;
+}
+.submit {
+  display: block;
+  height: 2em;
+  position: relative;
+  width: 300px;
+}
+.submit button {
+  border: 2px solid transparent;
+  background-color: transparent;
+  display: block;
+  height: 100%;
+  width: 100%;
+  transition: all 0.3s;
+  cursor: pointer;
+  outline: 0;
+  font-size: 1rem;
+}
+.submit button:hover,
+.submit button:focus,
+.submit button:active {
+  border-color: #262626;
+}
 html,
 body {
   margin: 0;
@@ -34,6 +113,8 @@ aside h1 {
 }
 aside section {
   margin-top: 1em;
+  overflow: hidden;
+  transition: all 0.5s;
 }
 aside section .title {
   color: #999;
@@ -73,7 +154,9 @@ aside section ul li > a:visited:after {
   width: 0;
 }
 aside section ul li > a:hover,
-aside section ul li > a:visited:hover {
+aside section ul li > a:visited:hover,
+aside section ul li > a.current,
+aside section ul li > a:visited.current {
   background-color: #595959;
   color: #eee;
   cursor: pointer;
@@ -87,41 +170,363 @@ aside section ul li > a:visited.current:after {
   right: 0;
 }
 body.unlogin #login {
-  display: block;
+  max-height: 100%;
 }
 body.unlogin #admin {
-  display: none;
+  max-height: 0;
+  margin-top: 0;
 }
 body.login #login {
-  display: none;
+  max-height: 0;
+  margin-top: 0;
 }
 body.login #admin {
-  display: block;
+  max-height: 100%;
 }
-#wrapper {
-  padding: 1em;
+@-webkit-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 #wrapper section {
   display: none;
 }
-#wrapper.start #start-content {
+#wrapper section.show {
   display: block;
 }
-#wrapper.query #query-content {
-  display: block;
+#wrapper section.show h2 {
+  animation: show-title 0.3s ease-out;
+  -webkit-animation: show-title 0.3s ease-out;
 }
-#wrapper.login #login-content {
-  display: block;
+#wrapper section.show .content {
+  animation: fade-in 1s ease-out;
+  -webkit-animation: fade-in 1s ease-out;
 }
-#wrapper.borrow #borrow-content {
-  display: block;
+#wrapper section h2 {
+  border-bottom: 1px solid #262626;
+  color: #262626;
+  font-size: 2em;
+  font-weight: 300;
+  margin: 0;
+  padding: 0.5em;
+  position: relative;
+  left: 0;
 }
-#wrapper.return #return-content {
-  display: block;
+#wrapper section .content {
+  padding: 1em;
 }
-#wrapper.cards #cards-content {
-  display: block;
+.list-page .content {
+  overflow-x: auto;
 }
-#wrapper.books #books-content {
+.list-page .content .filter {
+  margin-bottom: 2em;
+}
+.list-page .content #query-disp-mode {
+  float: right;
+}
+.list-page .content ul.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.list-page .content ul.list .column {
+  display: inline-block;
+  overflow: hidden;
+  height: 2em;
+}
+.list-page .content ul.list li.title {
+  border-top: 2px solid #262626;
+  border-bottom: 2px solid #262626;
+  min-height: 2em;
+  line-height: 2em;
+  color: #eee;
+  background-color: #262626;
+}
+.list-page .content ul.list li {
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid #262626;
+  border-left: 1px solid #262626;
+  border-right: 1px solid #262626;
+  height: 0;
+  line-height: 2em;
+  transition: all 0.3s;
+}
+.list-page .content ul.list li.show,
+.list-page .content ul.list li.add {
+  height: 2em;
+}
+.list-page .content ul.list li.add:hover {
+  cursor: pointer;
+  font-size: 1.5em;
+}
+.list-page .content #query-filter,
+.list-page .content #cards-filter {
+  width: 500px;
+}
+.list-page .content #query-filter .show,
+.list-page .content #cards-filter .show {
+  position: relative;
+}
+.list-page .content #query-filter .show span.delete,
+.list-page .content #cards-filter .show span.delete {
+  position: absolute;
+  top: 0.5em;
+  left: 1em;
+  height: 1em;
+  width: 1em;
+  line-height: 0.9em;
+  background-color: #f33;
+  border-radius: 1em;
+  color: #eee;
+  border: 1px solid #c33;
+  opacity: 0;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.list-page .content #query-filter .show:hover span.delete,
+.list-page .content #cards-filter .show:hover span.delete {
+  opacity: 1;
+}
+.list-page .content #query-filter .column.filter-name,
+.list-page .content #cards-filter .column.filter-name {
+  width: 200px;
+}
+.list-page .content #query-filter .column.filter-relation,
+.list-page .content #cards-filter .column.filter-relation {
+  width: 98px;
+}
+.list-page .content #query-filter .column.filter-value,
+.list-page .content #cards-filter .column.filter-value {
+  width: 200px;
+}
+.list-page .content #query-filter .column.add,
+.list-page .content #cards-filter .column.add {
+  width: 500px;
+}
+.list-page .content #query-main-list,
+.list-page .content #cards-main-list {
+  width: 100%;
+  overflow-x: auto;
+}
+.list-page .content #cards-main-list li {
+  width: 600px;
+}
+.list-page .content #cards-main-list .column.cid {
+  width: 50px;
+}
+.list-page .content #cards-main-list .column.c-name {
+  width: 150px;
+}
+.list-page .content #cards-main-list .column.unit {
+  width: 200px;
+}
+.list-page .content #cards-main-list .column.c-category {
+  width: 200px;
+}
+.list-page .content #query-main-list li {
+  width: 1000px;
+}
+.list-page .content #query-main-list .column.bid {
+  width: 50px;
+}
+.list-page .content #query-main-list .column.category {
+  width: 100px;
+}
+.list-page .content #query-main-list .column.title {
+  width: 200px;
+}
+.list-page .content #query-main-list .column.press {
+  width: 200px;
+}
+.list-page .content #query-main-list .column.year {
+  width: 50px;
+}
+.list-page .content #query-main-list .column.author {
+  width: 100px;
+}
+.list-page .content #query-main-list .column.price {
+  width: 100px;
+}
+.list-page .content #query-main-list .column.total {
+  width: 50px;
+}
+.list-page .content #query-main-list .column.stock {
+  width: 50px;
+}
+.list-page .content #query-main-list .column.op {
+  width: 100px;
+}
+.list-page .content #query-main-table {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+.list-page .content #query-main-table:after {
+  content: " ";
+  width: 0;
+  height: 0;
+  overflow: hidden;
   display: block;
+  clear: both;
+}
+.list-page .content #query-main-table li {
+  display: block;
+  width: 200px;
+  height: 300px;
+  position: absolute;
+  opacity: 0;
+  transition: all 0.3s;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.list-page .content #query-main-table li.show {
+  opacity: 1;
+}
+.list-page .content #query-main-table li:hover {
+  background-size: contain;
+}
+.list-page .content #query-main-table li:hover .info {
+  opacity: 0.3;
+}
+.list-page .content #query-main-table li .info {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 5;
+  background-color: #000;
+  color: #fff;
+  transition: all 0.3s;
+}
+.list-page .content #query-main-table li .info .positioner {
+  box-sizing: border-box;
+  padding: 1em;
+  position: absolute;
+  bottom: 0;
+}
+.list-page .content #query-main-table li .info .positioner p {
+  margin: 0;
+}
+.list-page .content #query-main-table li .info .positioner p span:after {
+  content: " ";
+}
+#borrow-content .book-info,
+#return-content .book-info {
+  margin-bottom: 2em;
+  padding-left: 120px;
+  position: relative;
+  min-height: 180px;
+}
+#borrow-content .book-info .cover,
+#return-content .book-info .cover {
+  width: 120px;
+  height: 180px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#borrow-content .book-info .info,
+#return-content .book-info .info {
+  padding-left: 1em;
+}
+#borrow-content .book-info .info .line > .name,
+#return-content .book-info .info .line > .name {
+  min-width: 150px;
+  display: inline-block;
+  color: #999;
+  font-size: 0.8em;
+}
+@-moz-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@-o-keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@keyframes show-title {
+  from {
+    padding-left: 100px;
+    opacity: 0;
+  }
+  to {
+    padding-left: 0.5;
+    opacity: 1;
+  }
+}
+@-moz-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

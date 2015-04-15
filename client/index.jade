@@ -4,6 +4,7 @@ html(lang="zh-CN")
     meta(charset="utf-8")
     title Library Manage System - Database Project
     link(rel="stylesheet" href="css/style.css")
+    link(rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css")
   body.unlogin
     aside
       h1 Library
@@ -11,43 +12,137 @@ html(lang="zh-CN")
         span.title Students
         ul
           li
-            a(href="#query") Query
+            a.query(href="#query") Query
       section#login
         span.title Login
         ul
           li
-            a(href="#login") Login
+            a.login(href="#login") Login
           li
             a(href="mailto:mail@clarkok.com") Contact
       section#admin
         span.title Admin
         ul
           li
-            a(href="#borrow") Borrow
+            a.borrow(href="#borrow") Borrow
           li
-            a(href="#return") Return
+            a.return(href="#return") Return
           li
-            a(href="#cards") Cards
+            a.cards(href="#cards") Cards
           li
-            a(href="#books") Books
-          li
-            a(href="#logout") Logout
+            a.logout(href="#logout") Logout
     #wrapper.start
       section#start-content
         h2 Welcome
-      section#query-content
+      section#query-content.list-page
         h2 Query
+        .content
+          .filter
+            .switch#query-disp-mode(data-value="list")
+              .choose(data-value="list")
+                i.fa.fa-th-list
+              .choose(data-value="table")
+                i.fa.fa-th
+            form#filter(method="GET" action="javascript:void(0)")
+              ul.list#query-filter
+                li.title
+                  .column.filter-name
+                    span.title Name
+                  .column.filter-relation
+                    span.title Relation
+                  .column.filter-value
+                    span.title Value
+                li.add
+                  .column.add
+                    span.title +
+          ul.list#query-main-list
+            li.title
+              .column.bid
+                span.title ID
+              .column.category
+                span.title Category
+              .column.title
+                span.title Title
+              .column.press
+                span.title Press
+              .column.year
+                span.title Year
+              .column.author
+                span.title Author
+              .column.price
+                span.title Price
+              .column.total
+                span.title Total
+              .column.stock
+                span.stock Stock
+              .column.op
+          ul.table#query-main-table
+          ul.page-number
       section#login-content
         h2 Login
+        .content
+          form(method="POST" action="javascript:void(0)")
+            span.input-span
+              input#username(type="text" name="username")
+              label(for="username") Username
+            span.input-span
+              input#passwd(type="password" name="password")
+              label(for="passwd") Password
+            span.submit
+              button(type="submit") Submit
       section#borrow-content
         h2 Borrow
+        .content
+          .book-info
+          form#borrow-form(method="POST" action="javascript:void(0)")
+            span.input-span
+              input#borrow-cid(type="text" name="cid")
+              label(for="borrow-cid") Card ID
+            span.submit
+              button(type="submit") Borrow
       section#return-content
         h2 Return
-      section#cards-content
+        .content
+          .book-info
+          form#borrow-form(method="POST" action="javascript:void(0)")
+            span.input-span
+              input#borrow-cid(type="text" name="cid")
+              label(for="borrow-cid") Card ID
+            span.submit
+              button(type="submit") Return
+      section#cards-content.list-page
         h2 Cards
-      section#books-content
-        h2 Books
+        .content
+          .filter
+            form#cards-filter-wrapper(method="GET" action="javascript:void(0)")
+              ul.list#cards-filter
+                li.title
+                  .column.filter-name
+                    span.title Name
+                  .column.filter-relation
+                    span.title Relation
+                  .column.filter-value
+                    span.title Value
+                li.add
+                  .column.add
+                    span.title +
+          ul.list#cards-main-list
+            li.title
+              .column.cid
+                span.title ID
+              .column.c-name
+                span.title Name
+              .column.unit
+                span.title Unit
+              .column.c-category
+                span.title Category
+          ul.page-number
 
     script(src="js/jquery.js")
     script(src="js/socket.io.js")
+    script(src="js/switch.js")
+    script(src="js/list.js")
+    script(src="js/filter.js")
+    script(src="js/layout.js")
+    script(src="js/query.js")
     script(src="js/script.js")
