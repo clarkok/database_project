@@ -1,6 +1,6 @@
 var credential = require("./credential");
 var crypto = require("crypto");
-var dateUtil = require("./utils/dateUtil");
+var dateUtil = require("./utils/dateUtil").format;
 
 var knex = require('knex')({
   client: 'mysql',
@@ -70,23 +70,25 @@ exports.query = query;
 
 function query(query) {
   var action = {
-    query: function(data) {
-      return data.conditions.reduce(function(prev, current) {
+    query: function (data) {
+      return data.conditions.reduce(function (prev, current) {
         return prev.where(current.column, current.operator, current.value);
       }, knex('book'));
     },
 
-    borrow: function(data) {
+    borrow: function (data) {
       checkPrivilege(data);
       return knex('borrow').insert({
         aid: data.aid,
         bid: data.bid,
         cid: data.cid,
         borrow_date: dateUtil('yyyy-MM-dd hh:mm:ss')
+      }).then(function (id) {
+        return id;
       });
     },
 
-    returnBook: function(data) {
+    returnBook: function (data) {
       return knex('borrow').where({
         bid: data.bid,
         cid: data.cid
@@ -95,7 +97,7 @@ function query(query) {
       });
     },
 
-    books: function(data) {
+    books: function (data) {
       checkPrivilege(data);
       return knex('borrow').leftOuterJoin('book', 'borrow.bid', 'book.bid')
         .where({
@@ -104,12 +106,12 @@ function query(query) {
         });
     },
 
-    listCard: function(data) {
+    listCard: function (data) {
       checkPrivilege(data);
       return knex('card');
     },
 
-    createCard: function(data) {
+    createCard: function (data) {
       checkPrivilege(data);
       return knex('card').insert({
         name: data.name,
@@ -118,7 +120,7 @@ function query(query) {
       });
     },
 
-    deleteCard: function(data) {
+    deleteCard: function (data) {
       checkPrivilege(data);
       return knex('card')
         .where({
@@ -127,7 +129,7 @@ function query(query) {
         .del();
     },
 
-    createBook: function(data) {
+    createBook: function (data) {
       checkPrivilege(data);
       return knex('book')
         .insert({
