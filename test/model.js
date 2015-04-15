@@ -11,23 +11,6 @@ chai.use(chaiAsPromised);
 
 
 describe("Actions", function() {
-  //describe("Check support actions", function() {
-  //  it('should support all the valid actions', function() {
-  //    var validActions = [
-  //      'query',
-  //      'borrow',
-  //      'return',
-  //      'books',
-  //      'list_card',
-  //      'delete_card',
-  //      'new_card',
-  //      'new_book',
-  //      'new_books',
-  //      'delete_books'
-  //    ];
-  //  });
-  //});
-
   describe("Check query action", function() {
     it('should return an object with action and data property', function() {
       var query = {
@@ -47,7 +30,22 @@ describe("Actions", function() {
           result.action = query.action;
           return result;
         })).to.eventually.have.property('action', 'query');
-    })
-  })
+    });
+  });
+
+  describe("Check borrow action", function() {
+    it('should return an array with only one element', function() {
+      var query = {
+        action: "borrow",
+        data: {
+          aid: 1,
+          bid: 1,
+          cid: 1
+        }
+      };
+      return expect(model.query(query)).to.eventually.be.a('array')
+        .and.have.length(1);
+    });
+  });
 });
 
