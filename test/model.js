@@ -9,10 +9,9 @@ var expect = chai.expect;
 
 chai.use(chaiAsPromised);
 
-
 describe("Actions", function() {
   describe("Check query action", function() {
-    it('should return an object with action and data property', function() {
+    it('should return an array', function() {
       var query = {
         action: "query",
         data: {
@@ -23,13 +22,7 @@ describe("Actions", function() {
           }]
         }
       };
-      return expect(model.query(query)
-        .then(function(data) {
-          var result = {};
-          result.data = data;
-          result.action = query.action;
-          return result;
-        })).to.eventually.have.property('action', 'query');
+      return expect(model.query(query)).to.eventually.be.a('array');
     });
   });
 
