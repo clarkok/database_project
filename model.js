@@ -73,9 +73,14 @@ function query(query) {
     query: function (data) {
       return data.conditions.reduce(function (prev, current) {
         return prev.where(current.column, current.operator, current.value);
-      }, knex('book'));
+      }, knex('book'))
+        .then(function(rows) {
+          return rows;
+        });
     },
 
+    // TODO: Change to transaction
+    // TODO: Handle error
     borrow: function (data) {
       checkPrivilege(data);
       return knex('borrow').insert({
@@ -88,6 +93,7 @@ function query(query) {
       });
     },
 
+    // TODO: change to transaction
     returnBook: function (data) {
       return knex('borrow').where({
         bid: data.bid,
