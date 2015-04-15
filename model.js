@@ -1,6 +1,6 @@
 var credential = require("./credential");
 var crypto = require("crypto");
-var dataUtil = require("./utils/dateUtil");
+var dateUtil = require("./utils/dateUtil");
 
 var knex = require('knex')({
   client: 'mysql',
@@ -29,7 +29,7 @@ function adminLogin(user) {
       // Username found, calculate hash
       var hash = crypto.createHash('sha1');
       user.password = hash.update(rows[0].salt).update(user.password).digest('hex');
-      
+
       return knex.select('aid')
         .from('admin')
         .where({
