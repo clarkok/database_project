@@ -33,8 +33,8 @@
         },
 
         session: {
-            key: '<session_name>';
-            secret: '<session_secret>';
+            key: '<session_name>',
+            secret: '<session_secret>'
         }
     };
     ```
