@@ -46,7 +46,7 @@ library.post('/login', function(req, res, next) {
       sess.aid = user.aid;
       sess.cookie.maxAge = hour * 2;
       res.status(200).json({
-        code: 0,
+        code: 0
       });
     })
     .catch(function(err) {
