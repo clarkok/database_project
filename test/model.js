@@ -22,7 +22,7 @@ describe("Actions", function() {
           }]
         }
       };
-      return expect(model.query(query)).to.eventually.be.a('array');
+      return expect(model.query(query)).to.eventually.be.an('array');
     });
   });
 
@@ -36,7 +36,7 @@ describe("Actions", function() {
           cid: 1
         }
       };
-      return expect(model.query(query)).to.eventually.be.a('array')
+      return expect(model.query(query)).to.eventually.be.an('array')
         .and.have.length(1);
     });
   });
