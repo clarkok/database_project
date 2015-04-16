@@ -41,9 +41,10 @@ library.post('/login', function(req, res, next) {
   model.adminLogin(user)
     .then(function(user) {
       var sess = req.session;
-      sess.loggedIn = true;
+      var hour = 3600000;
       sess.username = user.username;
       sess.aid = user.aid;
+      sess.cookie.maxAge = hour * 2;
       res.status(200).json({
         code: 0,
       });
