@@ -57,24 +57,16 @@ html(lang="zh-CN")
                     span.title +
           ul.list#query-main-list
             li.title
-              .column.bid
-                span.title ID
-              .column.category
-                span.title Category
               .column.title
                 span.title Title
+              .column.category
+                span.title Category
               .column.press
                 span.title Press
               .column.year
                 span.title Year
               .column.author
                 span.title Author
-              .column.price
-                span.title Price
-              .column.total
-                span.title Total
-              .column.stock
-                span.stock Stock
               .column.op
           ul.table#query-main-table
           ul.page-number
@@ -139,10 +131,12 @@ html(lang="zh-CN")
           ul.page-number
 
     script(src="js/jquery.js")
+    script(src="js/jquery.MD5.js")
     script(src="js/socket.io.js")
     script(src="js/switch.js")
     script(src="js/list.js")
     script(src="js/filter.js")
     script(src="js/layout.js")
     script(src="js/query.js")
+    script(src="js/hook.js")
     script(src="js/script.js")

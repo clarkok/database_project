@@ -11,25 +11,34 @@ Usage douban2csv.py <query>
 Example:
     douban2csv.py 'search?q=computer'
 """);
+    exit(-1)
 
 conn = http.client.HTTPConnection('api.douban.com')
 conn.request('GET', '/v2/book/' + sys.argv[1])
 res = conn.getresponse()
-print(res.status)
 data = res.read()
+
+def parseInt(s):
+    ret = ''
+    for x in s:
+        if x.isdigit():
+            ret += x
+        else:
+            break
+    return (ret)
 
 parsed_data = json.loads(data.decode(encoding='UTF-8'))
 
 for book in parsed_data['books']:
     if len(book['tags']) == 0:
         book['tags'].append({'name': 'Uncategoried'})
-    print(book['id'] + ';' +\
-        book['tags'][0]['name'] + ';' +\
-        book['title'] + ';' +\
-        book['publisher'] + ';' +\
-        (''.join([x for x in book['pubdate'] if x.isdigit()])) + ';' +\
-        book['author'][0] + ';' +\
-        (''.join([x for x in book['price'] if x.isdigit()])) + ';' +\
-        '100;80'
+    print('"' + book['id'] + '";' +\
+        '"' + book['tags'][0]['name'] + '"' + ';' +\
+        '"' + book['title'] + '"' + ';' +\
+        '"' + book['publisher'] + '"' + ';' +\
+        '"' + parseInt(book['pubdate']) + '"' + ';' +\
+        '"' + book['author'][0] + '"' + ';' +\
+        '"' + parseInt(book['price']) + '"' + ';' +\
+        '"100";"80"'
         )
 

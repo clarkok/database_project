@@ -77,26 +77,13 @@
   }
 })();
 
-var updateObject = function (obj, b) {
-  var _this = obj;
-  Object.getOwnPropertyNames(_this).forEach(function (item) {
-    if (b.hasOwnProperty(item))
-      _this[item] = b[item];
-    else
-      delete _this[item];
-  });
-  Object.getOwnPropertyNames(b).forEach(function (item) {
-    if (!_this.hasOwnProperty(item))
-      _this[item] = b[item];
-  });
-  return obj;
-};
-
 var route = {};
 
 var $wrapper = $('#wrapper');
 
 var books = {};
+hookBooks(books);
+
 var cards = {};
 
 // query
@@ -107,20 +94,24 @@ var cards = {};
   var buildBookList = function (book) {
     book.id = book.bid;
     return $('<li />').append(
-      $('<div />').addClass('column bid').text(book.bid),
-      $('<div />').addClass('column category').text(book.category),
+      // $('<div />').addClass('column bid').text(book.bid),
       $('<div />').addClass('column title').text(book.title),
+      $('<div />').addClass('column category').text(book.category),
       $('<div />').addClass('column press').text(book.press),
       $('<div />').addClass('column year').text(book.year),
       $('<div />').addClass('column author').text(book.author),
-      $('<div />').addClass('column price').text(book.price),
-      $('<div />').addClass('column total').text(book.total),
-      $('<div />').addClass('column stock').text(book.stock),
+      // $('<div />').addClass('column price').text(book.price),
+      // $('<div />').addClass('column total').text(book.total),
+      // $('<div />').addClass('column stock').text(book.stock),
       $('<div />').addClass('column op').append(
-        $('<a />').attr('href', '#borrow?bid=' + book.bid)
-          .addClass('borrow').text('borrow'),
-        $('<a />').attr('href', '#return?bid=' + book.bid)
-          .addClass('return').text('return')
+        $('<a />').attr('href', '#borrow?bid=' + book.bid).attr('alt', 'borrow')
+          .addClass('borrow').append(
+            $('<i />').addClass('fa fa-book')
+          ),
+        $('<a />').attr('href', '#return?bid=' + book.bid).attr('alt', 'return')
+          .addClass('return').append(
+            $('<i />').addClass('fa fa-undo')
+          )
       )
     ).data('original', book);
   };
@@ -141,6 +132,27 @@ var cards = {};
     ).data('original', book).css('background-image', 'url(' + book.cover + ')');
   };
 
+  var filterArray = function () {
+    var ret = [];
+
+    var Filter = function (name, op, value) {
+      this.column = name;
+      this.operator = op;
+      this.value = value;
+    }
+
+    $('#query-filter').children('li.show').each(function () {
+      var $this = $(this);
+      ret.push(new Filter(
+        $this.find('.filter-name select').val(),
+        $this.find('.filter-relation select').val(),
+        $this.find('.filter-value input').val()
+      ));
+    });
+
+    return ret;
+  }
+
   $('#query-filter').filterInit([
     'bid',
     'category',
@@ -152,7 +164,20 @@ var cards = {};
     'total',
     'stock'
   ]).on('filterchange', function () {
-  });
+    var conditions = filterArray();
+    console.log(conditions);
+
+    var query_obj = {
+      action : 'query',
+      data : {
+        conditions : conditions
+      }
+    };
+
+    w.setTimeout(function () {
+      s.emit('query', query_obj);
+    }, 50);
+  }).trigger('filterchange');
 
   var list = new w.List(books, buildBookList, $list, 'b');
   var table = new w.List(books, buildBookTable, $table, 'bt');
@@ -241,9 +266,33 @@ var cards = {};
   route['login'] = {
     init : function () {
       $login.find('input').on('blur', checkLength);
+      $login.find('form button').on('click', function (e) {
+        var username = $('#username').val();
+        var password = $('#passwd').val();
+        password = $.md5(password);
+
+        console.log(username, password);
+
+        $.post('/login', {
+          username: username,
+          password: password
+        }, function (ret) {
+          if (ret.code === 0) {
+            $('body').get(0).className = 'login';
+            if (w.location.query.redir)
+              w.location.hash = decodeURIComponent(w.location.query.redir);
+            else
+              w.location.hash = 'query';
+          }
+          else {
+            w.alert('Error on login');
+          }
+        });
+      });
     },
     deinit : function () {
       $login.find('input').off('blur', checkLength);
+      $login.find('form button').off('click');
     }
   };
 })(window.jQuery, window);
