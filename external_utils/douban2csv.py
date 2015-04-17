@@ -18,6 +18,15 @@ conn.request('GET', '/v2/book/' + sys.argv[1])
 res = conn.getresponse()
 data = res.read()
 
+def parseInt(s):
+    ret = ''
+    for x in s:
+        if x.isdigit():
+            ret += x
+        else:
+            break
+    return (ret)
+
 parsed_data = json.loads(data.decode(encoding='UTF-8'))
 
 for book in parsed_data['books']:
@@ -27,9 +36,9 @@ for book in parsed_data['books']:
         '"' + book['tags'][0]['name'] + '"' + ';' +\
         '"' + book['title'] + '"' + ';' +\
         '"' + book['publisher'] + '"' + ';' +\
-        '"' + (''.join([x for x in book['pubdate'] if x.isdigit()])) + '"' + ';' +\
+        '"' + parseInt(book['pubdate']) + '"' + ';' +\
         '"' + book['author'][0] + '"' + ';' +\
-        '"' + (''.join([x for x in book['price'] if x.isdigit()])) + '"' + ';' +\
+        '"' + parseInt(book['price']) + '"' + ';' +\
         '"100";"80"'
         )
 
