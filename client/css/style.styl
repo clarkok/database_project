@@ -221,12 +221,15 @@ body.login
       .column
         display inline-block
         overflow hidden
-        height 2em
+        height 3em
+        line-height 3em
+        box-sizing border-box
+        padding 0 .2em
       li.title
         border-top 2px solid $color
         border-bottom 2px solid $color
-        min-height 2em
-        line-height 2em
+        min-height 3em
+        line-height 3em
         color $background
         background-color $color
       li
@@ -236,31 +239,31 @@ body.login
         border-left 1px solid $color
         border-right 1px solid $color
         height 0
-        line-height 2em
+        line-height 3em
         transition all .3s
         &.show, &.add
-          height 2em
+          height 3em
         &.add:hover
           cursor pointer
           font-size 1.5em
     #query-filter, #cards-filter
       width 500px
+      span.delete
+        position absolute
+        top 1em
+        left 1em
+        height 1em
+        width 1em
+        line-height .9em
+        background-color #f33
+        border-radius 1em
+        color $background
+        border 1px solid #c33
+        opacity 0
+        transition all .3s
+        cursor pointer
       .show
         position relative
-        span.delete
-          position absolute
-          top .5em
-          left 1em
-          height 1em
-          width 1em
-          line-height .9em
-          background-color #f33
-          border-radius 1em
-          color $background
-          border 1px solid #c33
-          opacity 0
-          transition all .3s
-          cursor pointer
         &:hover
           span.delete
             opacity 1
@@ -290,28 +293,36 @@ body.login
           width 200px
     #query-main-list
       li
-        width 1000px
+        width 800px
       .column
-        &.bid
-          width 50px
+        position relative
+        &.title
+          width 250px
         &.category
           width 100px
-        &.title
-          width 200px
         &.press
           width 200px
         &.year
           width 50px
         &.author
           width 100px
-        &.price
-          width 100px
-        &.total
-          width 50px
-        &.stock
-          width 50px
         &.op
           width 100px
+          a
+            color black
+            padding 0 .5em
+            transition all .3s
+            &:hover
+              color #aaa
+      li.show > .column:after
+        content " "
+        display block
+        position absolute
+        width 1em
+        height 100%
+        background linear-gradient(270deg, #eee, transparent)
+        top 0
+        right 0
     #query-main-table
       margin 0
       padding 0

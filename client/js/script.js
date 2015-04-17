@@ -94,20 +94,24 @@ var cards = {};
   var buildBookList = function (book) {
     book.id = book.bid;
     return $('<li />').append(
-      $('<div />').addClass('column bid').text(book.bid),
-      $('<div />').addClass('column category').text(book.category),
+      // $('<div />').addClass('column bid').text(book.bid),
       $('<div />').addClass('column title').text(book.title),
+      $('<div />').addClass('column category').text(book.category),
       $('<div />').addClass('column press').text(book.press),
       $('<div />').addClass('column year').text(book.year),
       $('<div />').addClass('column author').text(book.author),
-      $('<div />').addClass('column price').text(book.price),
-      $('<div />').addClass('column total').text(book.total),
-      $('<div />').addClass('column stock').text(book.stock),
+      // $('<div />').addClass('column price').text(book.price),
+      // $('<div />').addClass('column total').text(book.total),
+      // $('<div />').addClass('column stock').text(book.stock),
       $('<div />').addClass('column op').append(
-        $('<a />').attr('href', '#borrow?bid=' + book.bid)
-          .addClass('borrow').text('borrow'),
-        $('<a />').attr('href', '#return?bid=' + book.bid)
-          .addClass('return').text('return')
+        $('<a />').attr('href', '#borrow?bid=' + book.bid).attr('alt', 'borrow')
+          .addClass('borrow').append(
+            $('<i />').addClass('fa fa-book')
+          ),
+        $('<a />').attr('href', '#return?bid=' + book.bid).attr('alt', 'return')
+          .addClass('return').append(
+            $('<i />').addClass('fa fa-undo')
+          )
       )
     ).data('original', book);
   };

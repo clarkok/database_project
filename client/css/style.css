@@ -245,13 +245,16 @@ body.login #admin {
 .list-page .content ul.list .column {
   display: inline-block;
   overflow: hidden;
-  height: 2em;
+  height: 3em;
+  line-height: 3em;
+  box-sizing: border-box;
+  padding: 0 0.2em;
 }
 .list-page .content ul.list li.title {
   border-top: 2px solid #262626;
   border-bottom: 2px solid #262626;
-  min-height: 2em;
-  line-height: 2em;
+  min-height: 3em;
+  line-height: 3em;
   color: #eee;
   background-color: #262626;
 }
@@ -262,12 +265,12 @@ body.login #admin {
   border-left: 1px solid #262626;
   border-right: 1px solid #262626;
   height: 0;
-  line-height: 2em;
+  line-height: 3em;
   transition: all 0.3s;
 }
 .list-page .content ul.list li.show,
 .list-page .content ul.list li.add {
-  height: 2em;
+  height: 3em;
 }
 .list-page .content ul.list li.add:hover {
   cursor: pointer;
@@ -277,14 +280,10 @@ body.login #admin {
 .list-page .content #cards-filter {
   width: 500px;
 }
-.list-page .content #query-filter .show,
-.list-page .content #cards-filter .show {
-  position: relative;
-}
-.list-page .content #query-filter .show span.delete,
-.list-page .content #cards-filter .show span.delete {
+.list-page .content #query-filter span.delete,
+.list-page .content #cards-filter span.delete {
   position: absolute;
-  top: 0.5em;
+  top: 1em;
   left: 1em;
   height: 1em;
   width: 1em;
@@ -296,6 +295,10 @@ body.login #admin {
   opacity: 0;
   transition: all 0.3s;
   cursor: pointer;
+}
+.list-page .content #query-filter .show,
+.list-page .content #cards-filter .show {
+  position: relative;
 }
 .list-page .content #query-filter .show:hover span.delete,
 .list-page .content #cards-filter .show:hover span.delete {
@@ -338,16 +341,16 @@ body.login #admin {
   width: 200px;
 }
 .list-page .content #query-main-list li {
-  width: 1000px;
+  width: 800px;
 }
-.list-page .content #query-main-list .column.bid {
-  width: 50px;
+.list-page .content #query-main-list .column {
+  position: relative;
+}
+.list-page .content #query-main-list .column.title {
+  width: 250px;
 }
 .list-page .content #query-main-list .column.category {
   width: 100px;
-}
-.list-page .content #query-main-list .column.title {
-  width: 200px;
 }
 .list-page .content #query-main-list .column.press {
   width: 200px;
@@ -358,17 +361,26 @@ body.login #admin {
 .list-page .content #query-main-list .column.author {
   width: 100px;
 }
-.list-page .content #query-main-list .column.price {
-  width: 100px;
-}
-.list-page .content #query-main-list .column.total {
-  width: 50px;
-}
-.list-page .content #query-main-list .column.stock {
-  width: 50px;
-}
 .list-page .content #query-main-list .column.op {
   width: 100px;
+}
+.list-page .content #query-main-list .column.op a {
+  color: #000;
+  padding: 0 0.5em;
+  transition: all 0.3s;
+}
+.list-page .content #query-main-list .column.op a:hover {
+  color: #aaa;
+}
+.list-page .content #query-main-list li.show > .column:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 1em;
+  height: 100%;
+  background: linear-gradient(270deg, #eee, transparent);
+  top: 0;
+  right: 0;
 }
 .list-page .content #query-main-table {
   margin: 0;
