@@ -83,32 +83,41 @@ function query(query) {
     borrow: function (data) {
       checkPrivilege(data);
       return knex.transaction(function(trx) {
-        // get the stock of given book
-        return trx('book')
-          .select('stock')
-          .where({ bid: data.bid })
-          .then(function(rows) {
-            if (rows.length === 0) throw new Error("Invalid bid");
-            if (rows[0] === 0) throw new Error("Not enough stock!");
-            data.stock = rows[0];
-            // set default due_date to 30 days later
-            var dueDate = new Date();
-            var dueDay = dueDate.getDay() + 30;
-            dueDate.setDate(dueDay);
-            // try to add borrow record
-            return trx('borrow').insert({
-              aid: data.aid,
-              bid: data.bid,
-              cid: data.cid,
-              borrow_date: dateUtil('yyyy-MM-dd hh:mm:ss'),
-              due_date: dateUtil(dueDate, 'yyyy-MM-dd hh:mm:ss')
-            }).then(function() {
-              // decrease stock
-              return trx('book')
-                .update({ stock: data.stock - 1 })
-                .where({ bid: data.bid })
-            });
-          })
+        // check if same person borrow the same book
+        return trx('borrow')
+          .where({
+            bid: data.bid,
+            cid: data.cid,
+            return_date: null
+          }).then(function(rows) {
+            if (rows.length > 0) throw new Error("Repeat borrow");
+            // get the stock of given book
+            return trx('book')
+              .select('stock')
+              .where({ bid: data.bid })
+              .then(function(rows) {
+                if (rows.length === 0) throw new Error("Invalid bid");
+                if (rows[0].stock === 0) throw new Error("Not enough stock!");
+                data.stock = rows[0].stock;
+                // set default due_date to 30 days later
+                var dueDate = new Date();
+                var dueDay = dueDate.getDay() + 30;
+                dueDate.setDate(dueDay);
+                // try to add borrow record
+                return trx('borrow').insert({
+                  aid: data.aid,
+                  bid: data.bid,
+                  cid: data.cid,
+                  borrow_date: dateUtil('yyyy-MM-dd hh:mm:ss'),
+                  due_date: dateUtil(dueDate, 'yyyy-MM-dd hh:mm:ss')
+                }).then(function() {
+                  // decrease stock
+                  return trx('book')
+                    .update({ stock: data.stock - 1 })
+                    .where({ bid: data.bid })
+                });
+              });
+          });
       });
     },
 
@@ -121,7 +130,7 @@ function query(query) {
           .then(function(rows) {
             if (rows.length === 0) throw new Error("Invalid bid");
             // increase stock
-            data.stock = rows[0];
+            data.stock = rows[0].stock;
             return trx('book')
               .update({ stock: data.stock + 1})
               .where({ bid: data.bid })
@@ -129,9 +138,10 @@ function query(query) {
                 // record return date
                 return trx('borrow').where({
                   bid: data.bid,
-                  cid: data.cid
+                  cid: data.cid,
+                  return_date: null
                 }).update({
-                  return_data: dateUtil('yyyy-MM-dd hh:mm:ss')
+                  return_date: dateUtil('yyyy-MM-dd hh:mm:ss')
                 });
               });
           });
