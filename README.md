@@ -85,6 +85,7 @@ id          | int(10) unsigned | NO         |Primary
 bid         | int(10) unsigned | NO         |References book.bid
 cid         | int(10) unsigned | NO         |References card.cid
 borrow_date | datetime         | NO         |
+due_date    | datetime         | NO         |
 return_date | datetime         | YES        |
 aid         | int(10) unsigned | NO         |References admin.aid
 

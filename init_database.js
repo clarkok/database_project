@@ -44,6 +44,7 @@ knex.schema.createTable('book', function(table) {
   table.integer('bid').notNullable().unsigned().references('bid').inTable('book');
   table.integer('cid').notNullable().unsigned().references('cid').inTable('card');
   table.dateTime('borrow_date').notNullable();
+  table.dateTime('due_date').notNullable();
   table.dateTime('return_date');
   table.integer('aid').unsigned().notNullable().references('aid').inTable('admin');
 })
