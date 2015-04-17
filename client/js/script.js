@@ -82,7 +82,8 @@ var route = {};
 var $wrapper = $('#wrapper');
 
 var books = {};
-hookBooks()(books);
+hookBooks(books);
+
 var cards = {};
 
 // query
@@ -127,6 +128,27 @@ var cards = {};
     ).data('original', book).css('background-image', 'url(' + book.cover + ')');
   };
 
+  var filterArray = function () {
+    var ret = [];
+
+    var Filter = function (name, op, value) {
+      this.column = name;
+      this.operator = op;
+      this.value = value;
+    }
+
+    $('#query-filter').children('li.show').each(function () {
+      var $this = $(this);
+      ret.push(new Filter(
+        $this.find('.filter-name select').val(),
+        $this.find('.filter-relation select').val(),
+        $this.find('.filter-value input').val()
+      ));
+    });
+
+    return ret;
+  }
+
   $('#query-filter').filterInit([
     'bid',
     'category',
@@ -138,7 +160,20 @@ var cards = {};
     'total',
     'stock'
   ]).on('filterchange', function () {
-  });
+    var conditions = filterArray();
+    console.log(conditions);
+
+    var query_obj = {
+      action : 'query',
+      data : {
+        conditions : conditions
+      }
+    };
+
+    w.setTimeout(function () {
+      s.emit('query', query_obj);
+    }, 50);
+  }).trigger('filterchange');
 
   var list = new w.List(books, buildBookList, $list, 'b');
   var table = new w.List(books, buildBookTable, $table, 'bt');

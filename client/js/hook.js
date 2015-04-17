@@ -30,21 +30,14 @@ var s = window.io(window.location.origin);
 
   s.on('query', function (d) {
     console.log(d);
-    if (book_ref)
-      updateFromList(book_ref, d, 'bid');
-    /*
     switch(d.action) {
       case 'query':
-        updateFromList(book_ref, d.data);
+        updateFromList(book_ref, d.data, 'bid');
       break;
     };
-    */
   });
 
-  w.hookBooks = function () {
-    return function (books) {
-      book_ref = books;
-    };
+  w.hookBooks = function (books) {
+    book_ref = books;
   }
-
 })(window.jQuery, window);
