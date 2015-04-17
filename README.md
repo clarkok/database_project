@@ -50,6 +50,7 @@ Column     |Data Type          |Nullable   |Key
 ---        |---                |---        |---
 bid        |int(10) unsigned   |NO         |Primary
 category   |varchar(255)       |YES        |
+cover      |varchar(255)       |YES        |
 title      |varchar(255)       |YES        |
 press      |varchar(255)       |YES        |
 year       |int(11)            |YES        |
