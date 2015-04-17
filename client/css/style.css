@@ -395,6 +395,9 @@ body.login #admin {
   background-repeat: no-repeat;
   background-position: center;
 }
+.list-page .content #query-main-table li .info {
+  background-color: #fff;
+}
 .list-page .content #query-main-table li.show {
   opacity: 1;
 }

@@ -77,26 +77,12 @@
   }
 })();
 
-var updateObject = function (obj, b) {
-  var _this = obj;
-  Object.getOwnPropertyNames(_this).forEach(function (item) {
-    if (b.hasOwnProperty(item))
-      _this[item] = b[item];
-    else
-      delete _this[item];
-  });
-  Object.getOwnPropertyNames(b).forEach(function (item) {
-    if (!_this.hasOwnProperty(item))
-      _this[item] = b[item];
-  });
-  return obj;
-};
-
 var route = {};
 
 var $wrapper = $('#wrapper');
 
 var books = {};
+hookBooks()(books);
 var cards = {};
 
 // query
@@ -241,9 +227,33 @@ var cards = {};
   route['login'] = {
     init : function () {
       $login.find('input').on('blur', checkLength);
+      $login.find('form button').on('click', function (e) {
+        var username = $('#username').val();
+        var password = $('#passwd').val();
+        password = $.md5(password);
+
+        console.log(username, password);
+
+        $.post('/login', {
+          username: username,
+          password: password
+        }, function (ret) {
+          if (ret.code === 0) {
+            $('body').get(0).className = 'login';
+            if (w.location.query.redir)
+              w.location.hash = decodeURIComponent(w.location.query.redir);
+            else
+              w.location.hash = 'query';
+          }
+          else {
+            w.alert('Error on login');
+          }
+        });
+      });
     },
     deinit : function () {
       $login.find('input').off('blur', checkLength);
+      $login.find('form button').off('click');
     }
   };
 })(window.jQuery, window);
