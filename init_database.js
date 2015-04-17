@@ -1,5 +1,4 @@
 var db = require('./credential.js').db;
-var dateUtil = require('./utils/dateUtil.js');
 
 var knex = require('knex')({
   client: 'mysql',

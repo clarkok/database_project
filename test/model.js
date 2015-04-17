@@ -77,7 +77,7 @@ describe("Actions", function() {
       return expect(model.query(query)).to.be.rejectedWith(/Invalid bid/);
     });
 
-    it('should succeed and return an array with only one element', function() {
+    it('should succeed and return 1', function() {
       var query = {
         action: "return",
         data: {
