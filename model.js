@@ -72,9 +72,16 @@ exports.query = query;
 function query(query) {
   var action = {
     query: function (data) {
+      if (!data.sort_by) data.sort_by = 'bid';
+      if (!data.order) data.order = 'asc';
+      if (!data.page) data.page = 1;
+      var offset = (data.page - 1) * 30;
       return data.conditions.reduce(function (prev, current) {
         return prev.where(current.column, current.operator, current.value);
       }, knex('book'))
+        .orderBy(data.sort_by, data.order)
+        .limit(30)
+        .offset(offset)
         .then(function(rows) {
           return rows;
         });
@@ -159,7 +166,14 @@ function query(query) {
 
     listCard: function (data) {
       checkPrivilege(data);
-      return knex('card');
+      if (!data.sort_by) data.sort_by = 'cid';
+      if (!data.order) data.order = 'asc';
+      if (!data.page) data.page = 1;
+      var offset = (data.page - 1) * 30;
+      return knex('card')
+        .orderBy(data.sort_by, data.order)
+        .limit(30)
+        .offset(offset);
     },
 
     createCard: function (data) {
