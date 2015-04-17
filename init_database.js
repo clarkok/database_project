@@ -16,6 +16,7 @@ knex.schema.createTable('book', function(table) {
   table.increments('bid');
   table.string('category');
   table.string('title');
+  table.string('cover');
   table.string('press');
   table.integer('year');
   table.string('author');
