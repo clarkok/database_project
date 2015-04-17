@@ -1,6 +1,7 @@
 var credential = require("./credential");
 var crypto = require("crypto");
 var dateUtil = require("./utils/dateUtil").format;
+var debug = require('debug')('library:model');
 
 var knex = require('knex')({
   client: 'mysql',
@@ -79,27 +80,61 @@ function query(query) {
         });
     },
 
-    // TODO: Change to transaction
-    // TODO: Handle error
     borrow: function (data) {
       checkPrivilege(data);
-      return knex('borrow').insert({
-        aid: data.aid,
-        bid: data.bid,
-        cid: data.cid,
-        borrow_date: dateUtil('yyyy-MM-dd hh:mm:ss')
-      }).then(function (id) {
-        return id;
+      return knex.transaction(function(trx) {
+        // get the stock of given book
+        return trx('book')
+          .select('stock')
+          .where({ bid: data.bid })
+          .then(function(rows) {
+            if (rows.length === 0) throw new Error("Invalid bid");
+            if (rows[0] === 0) throw new Error("Not enough stock!");
+            data.stock = rows[0];
+            // set default due_date to 30 days later
+            var dueDate = new Date();
+            var dueDay = dueDate.getDay() + 30;
+            dueDate.setDate(dueDay);
+            // try to add borrow record
+            return trx('borrow').insert({
+              aid: data.aid,
+              bid: data.bid,
+              cid: data.cid,
+              borrow_date: dateUtil('yyyy-MM-dd hh:mm:ss'),
+              due_date: dateUtil(dueDate, 'yyyy-MM-dd hh:mm:ss')
+            }).then(function() {
+              // decrease stock
+              return trx('book')
+                .update({ stock: data.stock - 1 })
+                .where({ bid: data.bid })
+            });
+          })
       });
     },
 
-    // TODO: change to transaction
     returnBook: function (data) {
-      return knex('borrow').where({
-        bid: data.bid,
-        cid: data.cid
-      }).update({
-        return_data: dateUtil('yyyy-MM-dd hh:mm:ss')
+      return knex.transaction(function(trx) {
+        // get stock of given book
+        return trx('book')
+          .select('stock')
+          .where({ bid: data.bid })
+          .then(function(rows) {
+            if (rows.length === 0) throw new Error("Invalid bid");
+            // increase stock
+            data.stock = rows[0];
+            return trx('book')
+              .update({ stock: data.stock + 1})
+              .where({ bid: data.bid })
+              .then(function() {
+                // record return date
+                return trx('borrow').where({
+                  bid: data.bid,
+                  cid: data.cid
+                }).update({
+                  return_data: dateUtil('yyyy-MM-dd hh:mm:ss')
+                });
+              });
+          });
       });
     },
 
