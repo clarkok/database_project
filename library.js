@@ -58,6 +58,19 @@ library.post('/login', function(req, res, next) {
     });
 });
 
+library.get('/logout', function(req, res) {
+  req.session.destroy(function(err) {
+    var result = {};
+    result.code = 0;
+    if (err) {
+      result.code = 1;
+      console.error(err.stack);
+    }
+    res.clearCookie(credential.session.key);
+    res.json(result);
+  })
+});
+
 controller(server, sessionMiddleware);
 
 library.use(function(req, res, next) {
