@@ -13,14 +13,15 @@ library.use(logger('dev'));
 library.use(express.static(__dirname + '/client'));
 
 var sessionStore = new SessionStore(credential.db);
-
-library.use(session({
+var sessionMiddleware = session({
   key: credential.session.key,
   secret: credential.session.secret,
   store: sessionStore,
   resave: true,
   saveUninitialized: true
-}));
+});
+
+library.use(sessionMiddleware);
 
 library.use(bodyParser.json());
 library.use(bodyParser.urlencoded());
@@ -42,7 +43,6 @@ library.post('/login', function(req, res, next) {
     .then(function(user) {
       var sess = req.session;
       var hour = 3600000;
-      sess.username = user.username;
       sess.aid = user.aid;
       sess.cookie.maxAge = hour * 2;
       res.status(200).json({
@@ -58,7 +58,7 @@ library.post('/login', function(req, res, next) {
     });
 });
 
-controller(server);
+controller(server, sessionMiddleware);
 
 library.use(function(req, res, next) {
   res.status(404).send('Nothing found');

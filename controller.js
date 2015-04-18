@@ -1,7 +1,11 @@
 var model = require('./model');
 
-var controller = function(server) {
+var controller = function(server, sessionMiddleware) {
   var io = require('socket.io')(server);
+
+  io.use(function(socket, next) {
+    sessionMiddleware(socket.request, socket.request.res, next);
+  });
 
   io.on('connection', function(socket) {
 
