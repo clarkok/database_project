@@ -44,6 +44,9 @@
       $item.on('transitionend', function () {
         $item.remove();
       });
+      w.setTimeout(function () {
+        $item.remove();
+      }, 1000);
     };
 
     var updateFunc = function (changes) {
