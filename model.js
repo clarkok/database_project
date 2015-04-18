@@ -18,7 +18,7 @@ exports = module.exports;
 exports.adminLogin = adminLogin;
 
 function adminLogin(user) {
-  console.log(user.username + " is trying to login using password: " + user.password);
+  debug(user.username + " is trying to login using password: " + user.password);
 
   return knex.select('salt')
     .from('admin')
@@ -196,6 +196,7 @@ function query(query) {
 
     createBook: function (data) {
       checkPrivilege(data);
+      if (data.total < 0) throw new Error("Negative total number");
       return knex('book')
         .insert({
           category: data.category,

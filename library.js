@@ -23,8 +23,7 @@ var sessionMiddleware = session({
 
 library.use(sessionMiddleware);
 
-library.use(bodyParser.json());
-library.use(bodyParser.urlencoded());
+library.use(bodyParser.urlencoded({ extended: true }));
 
 //Routing
 
