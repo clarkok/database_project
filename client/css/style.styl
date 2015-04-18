@@ -351,7 +351,7 @@ body.login
         &:hover
           background-size contain
           .info
-            opacity 0.3
+            opacity 0.7
         .info
           display block
           width 100%
@@ -373,6 +373,13 @@ body.login
               margin 0
               span:after
                 content " "
+              &.op
+                a
+                  display inline-block
+                  color white
+                  margin .5em 2em
+                  &:hover
+                    color #aaa
 
 #borrow-content, #return-content
   .book-info

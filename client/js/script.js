@@ -94,15 +94,11 @@ var cards = {};
   var buildBookList = function (book) {
     book.id = book.bid;
     return $('<li />').append(
-      // $('<div />').addClass('column bid').text(book.bid),
       $('<div />').addClass('column title').text(book.title),
       $('<div />').addClass('column category').text(book.category),
       $('<div />').addClass('column press').text(book.press),
       $('<div />').addClass('column year').text(book.year),
       $('<div />').addClass('column author').text(book.author),
-      // $('<div />').addClass('column price').text(book.price),
-      // $('<div />').addClass('column total').text(book.total),
-      // $('<div />').addClass('column stock').text(book.stock),
       $('<div />').addClass('column op').append(
         $('<a />').attr('href', '#borrow?bid=' + book.bid).attr('alt', 'borrow')
           .addClass('borrow').append(
@@ -126,7 +122,17 @@ var cards = {};
             $('<span />').addClass('author').text(book.author),
             $('<span />').addClass('year').text(book.year)
           ),
-          $('<p />').addClass('press').text(book.press)
+          $('<p />').addClass('press').text(book.press),
+          $('<p />').addClass('op').append(
+            $('<a />').attr('href', '#borrow?bid=' + book.bid).attr('alt', 'borrow')
+              .addClass('borrow').append(
+                $('<i />').addClass('fa fa-book')
+              ),
+            $('<a />').attr('href', '#return?bid=' + book.bid).attr('alt', 'return')
+              .addClass('return').append(
+                $('<i />').addClass('fa fa-undo')
+              )
+          )
         )
       )
     ).data('original', book).css('background-image', 'url(' + book.cover + ')');
@@ -202,14 +208,13 @@ var cards = {};
     }
   }).trigger('change');
 
+  list.init();
+  table.init();
+
   route['query'] = {
     init : function () {
-      list.init();
-      table.init();
     },
     deinit : function () {
-      list.deinit();
-      table.deinit();
     }
   };
 })(window.jQuery, window);
@@ -300,7 +305,7 @@ var cards = {};
 var buildBookInfo = function (book) {
   return $('<div />').addClass('book-info').append(
     $('<div />').addClass('cover')
-      .css('background-color', 'url(' + book.cover + ')'),
+      .css('background-image', 'url(' + book.cover + ')'),
     $('<div />').addClass('info').append(
       $('<div />').addClass('line').append(
         $('<span />').addClass('name').text('Title'),
