@@ -35,6 +35,7 @@ for book in parsed_data['books']:
     print('"' + book['id'] + '";' +\
         '"' + book['tags'][0]['name'] + '"' + ';' +\
         '"' + book['title'] + '"' + ';' +\
+        '"' + book['image'] + '"' + ';' +\
         '"' + book['publisher'] + '"' + ';' +\
         '"' + parseInt(book['pubdate']) + '"' + ';' +\
         '"' + book['author'][0] + '"' + ';' +\
