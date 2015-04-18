@@ -77,6 +77,26 @@
 .submit button:active {
   border-color: #262626;
 }
+.submit:after {
+  content: "Succeed!";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #008000;
+  color: #fff;
+  line-height: 2em;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.5s;
+  z-index: -1;
+}
+.submit.succeed:after {
+  opacity: 1;
+  z-index: 1;
+}
 html,
 body {
   margin: 0;

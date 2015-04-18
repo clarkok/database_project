@@ -257,20 +257,41 @@ var cards = {};
   };
 })(window.jQuery, window);
 
+// logout
+(function ($, w) {
+  route['logout'] = {
+    init : function () {
+      $.get('/logout', function (d) {
+        if (d.code === 0) {
+          $('body').get(0).className = 'unlogin';
+          w.location.hash = '#query';
+        }
+      })
+    },
+    deinit : function () {
+    }
+  }
+})(window.jQuery, window);
+
+var checkLength = function () {
+  console.log('check length');
+  if ($(this).val().length > 0)
+    $(this).addClass('not-empty');
+  else
+    $(this).removeClass('not-empty');
+};
+
+$('.input-span input').each(function () {
+  $(this).on('blur', checkLength);
+  console.log(this);
+});
+
 // login
 (function ($, w) {
   var $login = $('#login-content');
 
-  var checkLength = function () {
-    if ($(this).val().length > 0)
-      $(this).addClass('not-empty');
-    else
-      $(this).removeClass('not-empty');
-  };
-
   route['login'] = {
     init : function () {
-      $login.find('input').on('blur', checkLength);
       $login.find('form button').on('click', function (e) {
         var username = $('#username').val();
         var password = $('#passwd').val();
@@ -345,6 +366,27 @@ var buildBookInfo = function (book) {
 
 // borrow
 (function ($, w) {
+  w.socketEvents.addListener('borrow', function (d) {
+    switch (d) {
+      case 0:
+        $('#borrow-content span.submit').addClass('succeed');
+        w.setTimeout(function () {
+          $('#borrow-content span.submit').removeClass('succeed');
+          w.location.hash='#query';
+        }, 5000);
+        break;
+      case 1:
+        w.alert('Not enough stock. Closest return date is ' + d.data.date);
+        break;
+      case -1:
+        w.alert('Invalid bid');
+        break;
+      default:
+        w.alert('Unknown error');
+        break;
+    }
+  });
+
   route['borrow'] = {
     init : function () {
       if ($('body').hasClass('unlogin')) {
@@ -358,6 +400,16 @@ var buildBookInfo = function (book) {
       }
       $('#borrow-content').find('.book-info')
         .replaceWith(buildBookInfo(books[parseInt(w.location.query['bid'], 10)]));
+      $('#borrow-content').find('button').on('click', function () {
+        console.log('click');
+        s.emit('query', {
+          action: 'borrow',
+          data: {
+            cid: $('#borrow-cid').val(),
+            bid: w.location.query['bid']
+          }
+        });
+      });
     },
     deinit : function () {
     }
@@ -366,6 +418,21 @@ var buildBookInfo = function (book) {
 
 // return
 (function ($, w) {
+  w.socketEvents.addListener('return', function (d) {
+    switch (d) {
+      case 0:
+        $('#return-content span.submit').addClass('succeed');
+        w.setTimeout(function () {
+          $('#return-content span.submit').removeClass('succeed');
+          w.location.hash='#query';
+        }, 5000);
+        break;
+      default:
+        w.alert('Unknown error');
+        break;
+    }
+  });
+
   route['return'] = {
     init : function () {
       if ($('body').hasClass('unlogin')) {
@@ -379,6 +446,16 @@ var buildBookInfo = function (book) {
       }
       $('#return-content').find('.book-info')
         .replaceWith(buildBookInfo(books[parseInt(w.location.query['bid'], 10)]));
+      $('#return-content').find('button').on('click', function () {
+        console.log('click');
+        s.emit('query', {
+          action: 'return',
+          data: {
+            cid: $('#return-cid').val(),
+            bid: w.location.query['bid']
+          }
+        });
+      });
     },
     deinit : function () {
     }

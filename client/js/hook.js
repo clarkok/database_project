@@ -23,18 +23,11 @@ var updateFromList = function (obj, b, id_field) {
   updateObject(obj, new_obj);
 };
 
-var s = window.io(window.location.origin);
-
 (function ($, w) {
   var book_ref;
 
-  s.on('query', function (d) {
-    console.log(d);
-    switch(d.action) {
-      case 'query':
-        updateFromList(book_ref, d.data, 'bid');
-      break;
-    };
+  w.socketEvents.addListener('query', function (d) {
+    updateFromList(book_ref, d, 'bid');
   });
 
   w.hookBooks = function (books) {
