@@ -99,13 +99,21 @@ function query(query) {
             cid: data.cid,
             return_date: null
           }).then(function(rows) {
-            if (rows.length > 0) throw new Error("Repeat borrow");
+            if (rows.length > 0) {
+              var result = {};
+              result.code = -2;
+              return result;
+            }
             // get the stock of given book
             return trx('book')
               .select('stock')
               .where({ bid: data.bid })
               .then(function(rows) {
-                if (rows.length === 0) throw new Error("Invalid bid");
+                if (rows.length === 0) {
+                  var result = {};
+                  result.code = -1;
+                  return result;
+                }
                 // if not available return min due_date
                 if (rows[0].stock === 0) {
                   return trx('borrow')
@@ -140,6 +148,10 @@ function query(query) {
                   return trx('book')
                     .update({ stock: data.stock - 1 })
                     .where({ bid: data.bid })
+                }).then(function() {
+                  var result = {};
+                  result.code = 0;
+                  return result;
                 });
               });
           });
