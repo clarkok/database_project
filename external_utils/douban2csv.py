@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 import json
-import http.client
 import sys
+import requests
 
 if (len(sys.argv) < 2):
     print(
@@ -13,10 +13,7 @@ Example:
 """);
     exit(-1)
 
-conn = http.client.HTTPConnection('api.douban.com')
-conn.request('GET', '/v2/book/' + sys.argv[1])
-res = conn.getresponse()
-data = res.read()
+parsed_data = requests.get('http://api.douban.com/v2/book/' + sys.argv[1]).json();
 
 def parseInt(s):
     ret = ''
@@ -26,8 +23,6 @@ def parseInt(s):
         else:
             break
     return (ret)
-
-parsed_data = json.loads(data.decode(encoding='UTF-8'))
 
 for book in parsed_data['books']:
     if len(book['tags']) == 0:
