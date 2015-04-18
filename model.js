@@ -182,7 +182,8 @@ function query(query) {
                 }).update({
                   return_date: dateUtil('yyyy-MM-dd hh:mm:ss')
                 });
-              });
+              })
+              .return({ code: 0});
           });
       });
     },
@@ -214,6 +215,11 @@ function query(query) {
         name: data.name,
         unit: data.unit,
         category: data.category
+      }).then(function(cid) {
+        var result = {};
+        result.cid = cid;
+        result.code = 0;
+        return result;
       });
     },
 
@@ -223,7 +229,8 @@ function query(query) {
         .where({
           cid: data.cid
         })
-        .del();
+        .del()
+        .return({ code: 0 });
     },
 
     createBook: function (data) {
@@ -239,7 +246,8 @@ function query(query) {
           price: data.price,
           total: data.total,
           stock: data.total
-        });
+        })
+        .return({ code: 0 });
     },
 
     bulkCreateBook: function(data) {
