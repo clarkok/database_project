@@ -3,6 +3,7 @@
 import json
 import sys
 import requests
+import re
 
 if (len(sys.argv) < 2):
     print(
@@ -16,18 +17,17 @@ Example:
 parsed_data = requests.get('http://api.douban.com/v2/book/' + sys.argv[1]).json();
 
 def parseInt(s):
-    ret = ''
-    for x in s:
-        if x.isdigit():
-            ret += x
-        else:
-            break
-    return (ret)
+    parse = re.search(r"[0-9\.]+", s);
+    if parse is not None:
+        return parse.group(0)
+    return ""
 
 for book in parsed_data['books']:
     if len(book['tags']) == 0:
         book['tags'].append({'name': 'Uncategoried'})
-    print('"' + book['id'] + '";' +\
+    if len(book['author']) == 0:
+        book['author'].append("Unknown")
+    print(
         '"' + book['tags'][0]['name'] + '"' + ';' +\
         '"' + book['title'] + '"' + ';' +\
         '"' + book['image'] + '"' + ';' +\
