@@ -2,6 +2,7 @@ var credential = require("./credential");
 var crypto = require("crypto");
 var dateUtil = require("./utils/dateUtil").format;
 var debug = require('debug')('library:model');
+var csv = require('csv');
 
 var knex = require('knex')({
   client: 'mysql',
@@ -104,7 +105,23 @@ function query(query) {
               .where({ bid: data.bid })
               .then(function(rows) {
                 if (rows.length === 0) throw new Error("Invalid bid");
-                if (rows[0].stock === 0) throw new Error("Not enough stock!");
+                // if not available return min due_date
+                if (rows[0].stock === 0) {
+                  return trx('borrow')
+                    .select('due_date')
+                    .where({
+                      bid: data.bid,
+                      return_date: null
+                    })
+                    .orderBy('due_date', 'asc')
+                    .limit(1)
+                    .then(function(rows) {
+                      var result = {};
+                      result.code = 1;
+                      result.date = rows[0].due_date;
+                      return result;
+                    });
+                }
                 data.stock = rows[0].stock;
                 // set default due_date to 30 days later
                 var dueDate = new Date();
@@ -135,7 +152,9 @@ function query(query) {
           .select('stock')
           .where({ bid: data.bid })
           .then(function(rows) {
-            if (rows.length === 0) throw new Error("Invalid bid");
+            if (rows.length === 0) {
+              return {code: -1};
+            }
             // increase stock
             data.stock = rows[0].stock;
             return trx('book')
@@ -208,6 +227,10 @@ function query(query) {
           total: data.total,
           stock: data.total
         });
+    },
+
+    bulkCreateBook: function(data) {
+      checkPrivilege(data);
     }
   };
   return action[eventMap[query.action]](query.data);
