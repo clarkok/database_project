@@ -7,6 +7,8 @@ var controller = function(server) {
 
     // client request a query
     socket.on('query', function(query) {
+      // reset query.data.aid
+      if (query.data && query.data.aid) query.data.aid = null;
       if (socket.request.session && socket.request.session.aid) {
         query.data.aid = socket.request.session.aid;
       }
