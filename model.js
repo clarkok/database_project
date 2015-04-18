@@ -2,7 +2,8 @@ var credential = require("./credential");
 var crypto = require("crypto");
 var dateUtil = require("./utils/dateUtil").format;
 var debug = require('debug')('library:model');
-var csv = require('csv');
+var Promise = require('bluebird');
+var parser = Promise.promisify(require('csv-parse'));
 
 var knex = require('knex')({
   client: 'mysql',
@@ -231,6 +232,31 @@ function query(query) {
 
     bulkCreateBook: function(data) {
       checkPrivilege(data);
+      var opt = {
+        delimiter: ';',
+        columns: [
+          'category',
+          'title',
+          'cover',
+          'press',
+          'year',
+          'author',
+          'price',
+          'total',
+          'stock'
+        ]
+      };
+      return parser(data.file, opt)
+        .then(function(output) {
+          return knex('book')
+            .insert(output);
+        })
+        .then(function(number) {
+          var result = {};
+          result.number = number;
+          result.code = 0;
+          return result;
+        });
     }
   };
   return action[eventMap[query.action]](query.data);
