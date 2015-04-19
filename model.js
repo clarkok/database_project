@@ -16,6 +16,7 @@ var knex = require('knex')({
 });
 
 exports = module.exports;
+exports.knex = knex;
 
 exports.adminLogin = adminLogin;
 
@@ -254,6 +255,7 @@ function query(query) {
       checkPrivilege(data);
       var opt = {
         delimiter: ';',
+        comment: '#',
         columns: [
           'category',
           'title',

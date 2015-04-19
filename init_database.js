@@ -1,3 +1,5 @@
+#!/usr/local/bin/node
+
 var db = require('./credential.js').db;
 
 var knex = require('knex')({

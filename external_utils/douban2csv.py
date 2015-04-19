@@ -6,7 +6,7 @@ import requests
 import re
 
 if (len(sys.argv) < 2):
-    keyword = input('Please input a keyword to search from Douban: ');
+    keyword = input('#Please input a keyword to search from Douban:\n');
 else:
     keyword = sys.argv[1];
 
