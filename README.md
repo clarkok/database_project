@@ -11,6 +11,8 @@
 
 ## Usage
 
+### Initiate database
+
 1. `npm install`
 2. Create a database, and a user on MySQL. For example:
 
@@ -41,6 +43,14 @@
 
 4. `node init_database.js` to create essential tables.
 5. `node library.js` and you are good to go.
+
+### Bulk add books from Douban
+
+```
+npm run books
+```
+
+When a hint bumps to you `#Please input a keyword to search from Douban:`, input a keyword.
 
 ## Database Structure
 
@@ -113,6 +123,20 @@ POST /login
 ```json
 {
     "code": 1
+}
+```
+
+### Admin logout
+
+```
+GET /logout
+```
+
+**Response**
+
+```json
+{
+    "code": 0
 }
 ```
 
