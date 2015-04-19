@@ -1,5 +1,13 @@
 var model = require('./model');
 
+var changeActions = [
+  "borrow",
+  "return",
+  "new_book",
+  "new_books",
+  "delete_books"
+];
+
 var controller = function(server, sessionMiddleware) {
   var io = require('socket.io')(server);
 
@@ -22,6 +30,9 @@ var controller = function(server, sessionMiddleware) {
           result.action = query.action;
           result.data = data;
           socket.emit('query', result);
+          if (changeActions.indexOf(result.action) >= 0) {
+            socket.broadcast.emit('change');
+          }
         })
         .catch(function(err) {
           console.log("query failed!");
