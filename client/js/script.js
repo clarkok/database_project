@@ -228,6 +228,7 @@ var cards = {};
 
   route['query'] = {
     init : function () {
+      $('#query-filter').trigger('filterchange');
     },
     deinit : function () {
     }
@@ -531,7 +532,7 @@ var buildBookInfo = function (book) {
       w.setTimeout(function () {
         $('#new-card-content span.submit').removeClass('succeed');
         $('#new-card-content input').val('');
-        w.location.hash = '#query';
+        w.location.hash = '#cards';
       }, 3000);
     }
     else
