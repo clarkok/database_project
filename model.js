@@ -281,6 +281,15 @@ function query(query) {
           result.code = 0;
           return result;
         });
+    },
+
+    deleteBooks: function(data) {
+      checkPrivilege(data);
+      return data.reduce(function(prev, current) {
+        return prev.orWhere({ bid: current });
+      }, knex('book'))
+        .del()
+        .return({ code: 0 });
     }
   };
   return action[eventMap[query.action]](query.data);
