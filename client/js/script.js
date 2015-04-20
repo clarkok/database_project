@@ -482,7 +482,7 @@ var buildBookInfo = function (book) {
     console.log(data);
     s.emit('query', {
       'action' : 'new_book',
-      data: [data]
+      data: data
     });
   }
 
@@ -521,7 +521,7 @@ var buildBookInfo = function (book) {
     console.log(data);
     s.emit('query', {
       'action' : 'new_card',
-      data: [data]
+      data: data
     });
   }
 
@@ -536,7 +536,7 @@ var buildBookInfo = function (book) {
     }
     else
       w.alert(d.error);
-  })
+  });
 
   route['new-card'] = {
     init : function () {
