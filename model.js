@@ -204,7 +204,9 @@ function query(query) {
       if (!data.order) data.order = 'asc';
       if (!data.page) data.page = 1;
       var offset = (data.page - 1) * 30;
-      return knex('card')
+      return data.conditions.reduce(function(prev, current) {
+        return prev.where(current.column, current.operator, current.value);
+      }, knex('card'))
         .orderBy(data.sort_by, data.order)
         .limit(30)
         .offset(offset);
