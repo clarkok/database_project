@@ -23,6 +23,17 @@
   };
 })(window.jQuery, window);
 
+(function ($, w) {
+  w.checkLogin = function () {
+    if ($('body').hasClass('unlogin')) {
+      w.location.hash = '#login?redir=' +
+        encodeURIComponent(w.location.hash.replace('#', ''));
+      return false;
+    }
+    return true;
+  }
+})(window.jQuery, window);
+
 (function () {
   var clone = function (obj) {
     var ret = {};
@@ -173,7 +184,6 @@ var cards = {};
     'stock'
   ]).on('filterchange', function () {
     var conditions = filterArray($('#query-filter'));
-    console.log(conditions);
 
     var query_obj = {
       action : 'query',
@@ -191,7 +201,6 @@ var cards = {};
   var table = new w.List(books, buildBookTable, $table, 'bt');
 
   var reLayout = function () {
-    console.log('re_layout');
     $table.layout(200, 300, 32, '.show');
   };
 
@@ -248,7 +257,6 @@ var cards = {};
     'category'
   ]).on('filterchange', function () {
     var conditions = filterArray($('#cards-filter'));
-    console.log(conditions);
     s.emit('query', {
       action : 'list_card',
       data : {
@@ -262,10 +270,7 @@ var cards = {};
 
   route['cards'] = {
     init : function () {
-      if ($('body').hasClass('unlogin')) {
-        return w.location.hash = '#login?redir=' +
-          encodeURIComponent(w.location.hash.replace('#', ''));
-      }
+      if (!checkLogin()) return;
       $('#cards-filter').trigger('filterchange');
     },
     deinit : function () {
@@ -290,7 +295,6 @@ var cards = {};
 })(window.jQuery, window);
 
 var checkLength = function () {
-  console.log('check length');
   if ($(this).val().length > 0)
     $(this).addClass('not-empty');
   else
@@ -299,7 +303,6 @@ var checkLength = function () {
 
 $('.input-span input').each(function () {
   $(this).on('blur', checkLength);
-  console.log(this);
 });
 
 // login
@@ -381,14 +384,13 @@ var buildBookInfo = function (book) {
 // borrow
 (function ($, w) {
   w.socketEvents.addListener('borrow', function (d) {
-    console.log(d);
     switch (d.code) {
       case 0:
         $('#borrow-content span.submit').addClass('succeed');
         w.setTimeout(function () {
           $('#borrow-content span.submit').removeClass('succeed');
           w.location.hash='#query';
-        }, 5000);
+        }, 3000);
         break;
       case 1:
         w.alert('Not enough stock. Closest return date is ' + d.data.date);
@@ -404,11 +406,8 @@ var buildBookInfo = function (book) {
 
   route['borrow'] = {
     init : function () {
-      if ($('body').hasClass('unlogin')) {
-        w.location.hash = '#login?redir=' + 
-          encodeURIComponent(w.location.hash.replace('#', ''));
+      if (!checkLogin())
         return;
-      }
       if (!w.location.query['bid']) {
         w.location.hash = '#query';
         return;
@@ -416,7 +415,6 @@ var buildBookInfo = function (book) {
       $('#borrow-content').find('.book-info')
         .replaceWith(buildBookInfo(books[parseInt(w.location.query['bid'], 10)]));
       $('#borrow-content').find('button').on('click', function () {
-        console.log('click');
         s.emit('query', {
           action: 'borrow',
           data: {
@@ -450,11 +448,7 @@ var buildBookInfo = function (book) {
 
   route['return'] = {
     init : function () {
-      if ($('body').hasClass('unlogin')) {
-        w.location.hash = '#login?redir=' + 
-          encodeURIComponent(w.location.hash.replace('#', ''));
-        return;
-      }
+      if (!checkLogin()) return;
       if (!w.location.query['bid']) {
         w.location.hash = '#query';
         return;
@@ -462,7 +456,6 @@ var buildBookInfo = function (book) {
       $('#return-content').find('.book-info')
         .replaceWith(buildBookInfo(books[parseInt(w.location.query['bid'], 10)]));
       $('#return-content').find('button').on('click', function () {
-        console.log('click');
         s.emit('query', {
           action: 'return',
           data: {
@@ -473,6 +466,85 @@ var buildBookInfo = function (book) {
       });
     },
     deinit : function () {
+    }
+  };
+})(window.jQuery, window);
+
+// new book
+(function ($, w) {
+  var newBook = function (e) {
+    e.preventDefault();
+    var data = {};
+    $('#new-book-form').serializeArray().forEach(function (item) {
+      data[item.name] = item.value;
+    });
+    data.stock = data.total;
+    console.log(data);
+    s.emit('query', {
+      'action' : 'new_book',
+      data: [data]
+    });
+  }
+
+  w.socketEvents.addListener('new_book', function (d) {
+    if (d.code === 0) {
+      $('#new-book-content span.submit').addClass('succeed');
+      w.setTimeout(function () {
+        $('#new-book-content span.submit').removeClass('succeed');
+        $('#new-book-content input').val('');
+        w.location.hash = '#query';
+      }, 3000);
+    }
+    else
+      w.alert(d.error);
+  })
+
+  route['new-book'] = {
+    init : function () {
+      if (!checkLogin()) return;
+      $('#new-book-content').find('button').on('click', newBook);
+    },
+    deinit : function () {
+      $('#new-book-content').find('button').off('click', newBook);
+    }
+  };
+})(window.jQuery, window);
+
+// new card
+(function ($, w) {
+  var newCard = function (e) {
+    e.preventDefault();
+    var data = {};
+    $('#new-card-form').serializeArray().forEach(function (item) {
+      data[item.name] = item.value;
+    });
+    console.log(data);
+    s.emit('query', {
+      'action' : 'new_card',
+      data: [data]
+    });
+  }
+
+  w.socketEvents.addListener('new_card', function (d) {
+    if (d.code === 0) {
+      $('#new-card-content span.submit').addClass('succeed');
+      w.setTimeout(function () {
+        $('#new-card-content span.submit').removeClass('succeed');
+        $('#new-card-content input').val('');
+        w.location.hash = '#query';
+      }, 3000);
+    }
+    else
+      w.alert(d.error);
+  })
+
+  route['new-card'] = {
+    init : function () {
+      if (!checkLogin()) return;
+      $('#new-card-content').find('button').on('click', newCard);
+    },
+    deinit : function () {
+      $('#new-card-content').find('button').off('click', newCard);
     }
   };
 })(window.jQuery, window);

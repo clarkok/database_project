@@ -30,6 +30,10 @@ html(lang="zh-CN")
           li
             a.cards(href="#cards") Cards
           li
+            a.new-book(href="#new-book") New Book
+          li
+            a.new-card(href="#new-card") New Card
+          li
             a.logout(href="#logout") Logout
     #wrapper.start
       section#start-content
@@ -129,6 +133,51 @@ html(lang="zh-CN")
               .column.c-category
                 span.title Category
           ul.page-number
+      section#new-book-content
+        h2 New Book
+        .content
+          form(action="javascript:void(0)")#new-book-form
+            span.input-span
+              input#new-book-title(type="text" name="title")
+              label(for="new-book-title") Title
+            span.input-span
+              input#new-book-catagory(type="text" name="catagory")
+              label(for="new-book-category") Category
+            span.input-span
+              input#new-book-press(type="text" name="press")
+              label(for="new-book-press") Press
+            span.input-span
+              input#new-book-year(type="text" name="year")
+              label(for="new-book-year") Year
+            span.input-span
+              input#new-book-author(type="text" name="author")
+              label(for="new-book-author") Author
+            span.input-span
+              input#new-book-price(type="text" name="price")
+              label(for="new-book-price") Price
+            span.input-span
+              input#new-book-total(type="text" name="total")
+              label(for="new-book-total") Total
+            span.input-span
+              input#new-book-cover(type="text" name="cover")
+              label(for="new-book-cover") Cover
+            span.submit
+              button(type="submit") Submit
+      section#new-card-content
+        h2 New Card
+        .content
+          form(action="javascript:void(0)")#new-card-form
+            span.input-span
+              input#new-card-name(type="text" name="name")
+              label(for="new-card-name") Name
+            span.input-span
+              input#new-card-unit(type="text" name="unit")
+              label(for="new-card-unit") Unit
+            span.input-span
+              input#new-card-category(type="text" name="category")
+              label(for="new-card-category") Category (student or teacher)
+            span.submit
+              button(type="submit") Submit
 
     script(src="js/jquery.js")
     script(src="js/jquery.MD5.js")
