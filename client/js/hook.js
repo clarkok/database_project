@@ -19,18 +19,27 @@ var updateFromList = function (obj, b, id_field) {
     item.id = item[id_field];
     new_obj[item.id] = item;
   });
-
   updateObject(obj, new_obj);
 };
 
 (function ($, w) {
   var book_ref;
+  var card_ref;
 
   w.socketEvents.addListener('query', function (d) {
     updateFromList(book_ref, d, 'bid');
   });
 
+  w.socketEvents.addListener('list_card', function (d) {
+    console.log(d);
+    updateFromList(card_ref, d, 'cid');
+  });
+
   w.hookBooks = function (books) {
     book_ref = books;
+  }
+
+  w.hookCards = function (cards) {
+    card_ref = cards;
   }
 })(window.jQuery, window);

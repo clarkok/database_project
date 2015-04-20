@@ -1,5 +1,28 @@
 "use struct";
 
+(function ($, w) {
+  w.filterArray = function ($filter) {
+    var ret = [];
+
+    var Filter = function (name, op, value) {
+      this.column = name;
+      this.operator = op;
+      this.value = value;
+    }
+
+    $filter.children('li.show').each(function () {
+      var $this = $(this);
+      ret.push(new Filter(
+        $this.find('.filter-name select').val(),
+        $this.find('.filter-relation select').val(),
+        $this.find('.filter-value input').val()
+      ));
+    });
+
+    return ret;
+  };
+})(window.jQuery, window);
+
 (function () {
   var clone = function (obj) {
     var ret = {};
@@ -138,27 +161,6 @@ var cards = {};
     ).data('original', book).css('background-image', 'url(' + book.cover + ')');
   };
 
-  var filterArray = function () {
-    var ret = [];
-
-    var Filter = function (name, op, value) {
-      this.column = name;
-      this.operator = op;
-      this.value = value;
-    }
-
-    $('#query-filter').children('li.show').each(function () {
-      var $this = $(this);
-      ret.push(new Filter(
-        $this.find('.filter-name select').val(),
-        $this.find('.filter-relation select').val(),
-        $this.find('.filter-value input').val()
-      ));
-    });
-
-    return ret;
-  }
-
   $('#query-filter').filterInit([
     'bid',
     'category',
@@ -170,7 +172,7 @@ var cards = {};
     'total',
     'stock'
   ]).on('filterchange', function () {
-    var conditions = filterArray();
+    var conditions = filterArray($('#query-filter'));
     console.log(conditions);
 
     var query_obj = {
@@ -211,6 +213,10 @@ var cards = {};
   list.init();
   table.init();
 
+  w.socketEvents.addListener('change', function () {
+    $('#query-filter').trigger('filterchange');
+  });
+
   route['query'] = {
     init : function () {
     },
@@ -222,6 +228,8 @@ var cards = {};
 // cards
 (function ($, w) {
   var $list = $('#cards-main-list');
+
+  hookCards(cards);
 
   var buildCardList = function (card) {
     card.id = card.cid;
@@ -239,20 +247,28 @@ var cards = {};
     'unit',
     'category'
   ]).on('filterchange', function () {
-  });
+    var conditions = filterArray($('#cards-filter'));
+    console.log(conditions);
+    s.emit('query', {
+      action : 'list_card',
+      data : {
+        conditions : conditions
+      }
+    });
+  }).trigger('filterchange');
 
-  var list = new w.List(cards, buildCardList, $list, 'b');
+  var list = new w.List(cards, buildCardList, $list, 'c');
+  list.init();
 
   route['cards'] = {
     init : function () {
       if ($('body').hasClass('unlogin')) {
-        w.location.hash = '#query';
-        return;
+        return w.location.hash = '#login?redir=' +
+          encodeURIComponent(w.location.hash.replace('#', ''));
       }
-      list.init();
+      $('#cards-filter').trigger('filterchange');
     },
     deinit : function () {
-      list.deinit();
     }
   };
 })(window.jQuery, window);
@@ -297,14 +313,13 @@ $('.input-span input').each(function () {
         var password = $('#passwd').val();
         password = $.md5(password);
 
-        console.log(username, password);
-
         $.post('/login', {
           username: username,
           password: password
         }, function (ret) {
           if (ret.code === 0) {
             $('body').get(0).className = 'login';
+            $login.find('input').val('').trigger('blur');
             if (w.location.query.redir)
               w.location.hash = decodeURIComponent(w.location.query.redir);
             else
@@ -317,7 +332,6 @@ $('.input-span input').each(function () {
       });
     },
     deinit : function () {
-      $login.find('input').off('blur', checkLength);
       $login.find('form button').off('click');
     }
   };
@@ -367,7 +381,8 @@ var buildBookInfo = function (book) {
 // borrow
 (function ($, w) {
   w.socketEvents.addListener('borrow', function (d) {
-    switch (d) {
+    console.log(d);
+    switch (d.code) {
       case 0:
         $('#borrow-content span.submit').addClass('succeed');
         w.setTimeout(function () {

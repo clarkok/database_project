@@ -27,4 +27,9 @@ var s = window.io(window.location.origin);
   s.on('error', function (d) {
     console.log(d);
   });
+
+  s.on('change', function (d) {
+    console.log(d);
+    w.socketEvents.trigger('change', d);
+  });
 })(window.jQuery, window);
