@@ -32,6 +32,8 @@ html(lang="zh-CN")
           li
             a.new-book(href="#new-book") New Book
           li
+            a.remove-book(href="#remove-book") Remove Book
+          li
             a.new-card(href="#new-card") New Card
           li
             a.logout(href="#logout") Logout
@@ -161,6 +163,15 @@ html(lang="zh-CN")
             span.input-span
               input#new-book-cover(type="text" name="cover")
               label(for="new-book-cover") Cover
+            span.submit
+              button(type="submit") Submit
+      section#remove-book-content
+        h2 Remove Book
+        .content
+          form(action="javascript:void(0)")#remove-book-form
+            span.input-span
+              input#remove-book-id(type="text" name="id")
+              label(for="remove-book-id") Book ID
             span.submit
               button(type="submit") Submit
       section#new-card-content

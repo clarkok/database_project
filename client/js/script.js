@@ -511,6 +511,45 @@ var buildBookInfo = function (book) {
   };
 })(window.jQuery, window);
 
+// remove card
+(function ($, w) {
+  var removeBook = function (e) {
+    e.preventDefault();
+    var data = {};
+    $('#remove-book-form').serializeArray().forEach(function (item) {
+      data[item.name] = item.value;
+    });
+    console.log(data);
+    s.emit('query', {
+      'action' : 'delete_books',
+      data: [data.id]
+    });
+  }
+
+  w.socketEvents.addListener('delete_books', function (d) {
+    if (d.code === 0) {
+      $('#remove-book-content span.submit').addClass('succeed');
+      w.setTimeout(function () {
+        $('#remove-book-content span.submit').removeClass('succeed');
+        $('#remove-book-content input').val('');
+        w.location.hash = '#query';
+      }, 3000);
+    }
+    else
+      w.alert(d.error);
+  });
+
+  route['remove-book'] = {
+    init : function () {
+      if (!checkLogin()) return;
+      $('#remove-book-content').find('button').on('click', removeBook);
+    },
+    deinit : function () {
+      $('#remove-book-content').find('button').off('click', removeBook);
+    }
+  };
+})(window.jQuery, window);
+
 // new card
 (function ($, w) {
   var newCard = function (e) {
