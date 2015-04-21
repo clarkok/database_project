@@ -242,13 +242,15 @@ function query(query) {
       if (data.bid.length > 0) {
         return knex('book')
           .update({
+            category: data.category,
             title: data.title,
             press: data.press,
             year: data.year,
             author: data.author,
             price: data.price,
             total: data.total,
-            stock: data.stock
+            stock: data.total,
+            cover: data.cover
           })
           .where({
             bid: data.bid
@@ -264,7 +266,8 @@ function query(query) {
           author: data.author,
           price: data.price,
           total: data.total,
-          stock: data.total
+          stock: data.total,
+          cover: data.cover
         })
         .return({ code: 0 });
     },

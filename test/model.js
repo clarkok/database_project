@@ -27,7 +27,7 @@ describe("Actions", function() {
   });
 
   describe("Check borrow action", function() {
-    it('should fail if bid not exist', function() {
+    it('should return proper code if bid not exist', function() {
       var query = {
         action: "return",
         data: {
@@ -36,10 +36,10 @@ describe("Actions", function() {
           cid: 1
         }
       };
-      return expect(model.query(query)).to.be.rejectedWith(/Invalid bid/);
+      return expect(model.query(query)).to.eventually.have.property('code', -1);
     });
 
-    it('should succeed and return 1', function() {
+    it('should return proper code if borrow succeed', function() {
       var query = {
         action: "borrow",
         data: {
@@ -48,10 +48,22 @@ describe("Actions", function() {
           cid: 1
         }
       };
-      return expect(model.query(query)).to.eventually.equal(1)
+      return expect(model.query(query)).to.eventually.have.property('code', 0);
     });
 
-    it('should fail if same person borrow the same book twice', function() {
+    it('should return proper code and due date if book not available', function() {
+      var query = {
+        action: "borrow",
+        data: {
+          aid: 1,
+          bid: 1,
+          cid: 2
+        }
+      };
+      return expect(model.query(query)).to.eventually.have.property('code', 1);
+    });
+
+    it('should return proper code if same person borrow the same book twice', function() {
       var query = {
         action: "borrow",
         data: {
@@ -60,12 +72,12 @@ describe("Actions", function() {
           cid: 1
         }
       };
-      return expect(model.query(query)).to.be.rejectedWith(/Repeat borrow/);
-    })
+      return expect(model.query(query)).to.eventually.have.property('code', -2);
+    });
   });
 
   describe("Check return action", function() {
-    it('should fail if bid not exist', function() {
+    it('should return proper code if bid not exist', function() {
       var query = {
         action: "return",
         data: {
@@ -74,10 +86,10 @@ describe("Actions", function() {
           cid: 1
         }
       };
-      return expect(model.query(query)).to.be.rejectedWith(/Invalid bid/);
+      return expect(model.query(query)).to.eventually.have.property('code', -1);
     });
 
-    it('should succeed and return 1', function() {
+    it('should return proper code if return succeed', function() {
       var query = {
         action: "return",
         data: {
@@ -86,7 +98,7 @@ describe("Actions", function() {
           cid: 1
         }
       };
-      return expect(model.query(query)).to.eventually.equal(1);
+      return expect(model.query(query)).to.eventually.have.property('code', 0);
     });
   });
 });
