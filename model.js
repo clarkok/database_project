@@ -239,6 +239,22 @@ function query(query) {
     createBook: function (data) {
       checkPrivilege(data);
       if (data.total < 0) throw new Error("Negative total number");
+      if (data.bid.length > 0) {
+        return knex('book')
+          .update({
+            title: data.title,
+            press: data.press,
+            year: data.year,
+            author: data.author,
+            price: data.price,
+            total: data.total,
+            stock: data.stock
+          })
+          .where({
+            bid: data.bid
+          })
+          .return({ code: 0 });
+      }
       return knex('book')
         .insert({
           category: data.category,
